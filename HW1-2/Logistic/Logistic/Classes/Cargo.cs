@@ -12,7 +12,9 @@
             this.Volume = Volume;
             this.Weight = Weight;
         }
-        public string GetInformation()//public override string ToString()
+        
+        //public override string ToString()
+        public string GetInformation()
         {
             return "Cargo №" + Code + "\nVolume = " + Volume.ToString() + "\nWeight = " + Weight.ToString();
         }
