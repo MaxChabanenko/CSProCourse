@@ -18,6 +18,7 @@ void SuccessScenario()
     Console.WriteLine("________Loaded(Success)_______");
     Console.WriteLine(boat.GetInformation());
 }
+
 void ExceptionScenario()
 {
     Vehicle car = new Vehicle(VehicleType.Car, 1000, 1000);
