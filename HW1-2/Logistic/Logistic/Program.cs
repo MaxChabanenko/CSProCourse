@@ -1,48 +1,70 @@
 ﻿using Logistic.ConsoleClient.Classes;
+using Logistic.ConsoleClient.DataAccess;
 
-void SuccessScenario()
-{
-    Vehicle boat = new Vehicle(VehicleType.Ship,8000,10000);
-    Console.WriteLine("________Empty(Success)________");
-    Console.WriteLine(boat.GetInformation());
+//void SuccessScenario()
+//{
 
-    Cargo[] cargos = new Cargo[4];
-    cargos[0] = new Cargo(1000,800,"1a");
-    cargos[1] = new Cargo(1500,500, "2b");
-    cargos[2] = new Cargo(2000,3000, "3c");
-    cargos[3] = new Cargo(2500,1000, "4d");
+//    List<Cargo> cargoList = new List<Cargo>();
 
-    foreach (var cargo in cargos)
-        boat.LoadCargo(cargo);
+//    cargoList.Add(new Cargo(1000, 800, "1a"));
+//    cargoList.Add(new Cargo(1500, 500, "2b"));
+//    cargoList.Add(new Cargo(2000, 3000, "3c"));
+//    cargoList.Add(new Cargo(2500, 1000, "4d"));
+//    Warehouse warehouse = new Warehouse();
+//    warehouse.Cargos = cargoList;
+//    warehouse.Id = 111;
 
-    Console.WriteLine("________Loaded(Success)_______");
-    Console.WriteLine(boat.GetInformation());
-}
-void ExceptionScenario()
-{
-    Vehicle car = new Vehicle(VehicleType.Car, 1000, 1000);
-    Console.WriteLine("________Empty(Exception)________");
-    Console.WriteLine(car.GetInformation());
+//    Warehouse warehouse2 = new Warehouse();
+//    warehouse2.Cargos = cargoList;
+//    warehouse2.Id = 333;
 
-    Cargo[] cargos = new Cargo[4];
-    cargos[0] = new Cargo(800, 800, "1a");
-    cargos[1] = new Cargo(1500, 1000, "2b");
-    cargos[2] = new Cargo(2000, 3000, "3c");
-    cargos[3] = new Cargo(2500, 1000, "4d");
+//    XmlRepository<Cargo> jsonRepository = new XmlRepository<Cargo>();
+//    //JsonRepository<Warehouse> jsonRepository = new JsonRepository<Warehouse>();
 
-    Console.WriteLine("________Loading(Exception)_______");
-    foreach (var cargo in cargos)
-        car.LoadCargo(cargo);
+//    var listW = new List<Warehouse>();
+//    listW.Add(warehouse);
+//    listW.Add(warehouse2);
 
-    Console.WriteLine("________Loaded(Exception)_______");
-    Console.WriteLine(car.GetInformation());
+//    jsonRepository.Create(cargoList);
+//    ;
 
-}
+//}
+//void ExceptionScenario()
+//{
+
+//    List<Cargo> cargoList = new List<Cargo>();
+
+//    cargoList.Add(new Cargo(1000, 800, "1a"));
+//    cargoList.Add(new Cargo(1500, 500, "2b"));
+//    cargoList.Add(new Cargo(2000, 3000, "3c"));
+//    cargoList.Add(new Cargo(2500, 1000, "4d"));
+
+//    XmlRepository<Cargo> jsonRepository = new XmlRepository<Cargo>();
+
+
+//   var a= jsonRepository.Read("Cargo_09_03_2023_11_37.xml");
+//    ;
+//}
 
 try
 {
-    SuccessScenario();
-    ExceptionScenario();
+    //SuccessScenario();
+    // ExceptionScenario();
+    var a = new Cargo(1000, 800, "1a");
+    InMemeoryRepository<Cargo, Guid>.Create(a);
+    InMemeoryRepository<Cargo, Guid>.Create(new Cargo(1500, 500, "2b"));
+
+    var b = InMemeoryRepository<Cargo, Guid>.ReadById(a.Id);
+
+    var list = InMemeoryRepository<Cargo, Guid>.ReadAll();
+
+    InMemeoryRepository<Cargo, Guid>.Update(a.Id, new Cargo(1500, 500, "2b"));
+
+    InMemeoryRepository<Cargo, Guid>.Delete(a.Id);
+
+
+
+
 }
 catch (Exception e)
 {
