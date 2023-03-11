@@ -1,9 +1,4 @@
 ﻿using Logistic.ConsoleClient.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logistic.ConsoleClient.DataAccess
 {
@@ -20,15 +15,20 @@ namespace Logistic.ConsoleClient.DataAccess
         }
         public static TEntity ReadById(Tid id)
         {
-
-            //return _list.Find();
-            foreach(TEntity entity in _list)
+            foreach (TEntity entity in _list)
             {
-                //switch class Tentity
-                if (entity is Cargo && ((Cargo)entity).Id == id)
+                //кращою ідеєю було б робити репозитарій для кожного класу, бо цей клас буде "божественим", але така умова
+                //це прям дуже костиль, треба випавляти, але не знаю як
+                if (entity is Cargo cargo && id is Guid gid && cargo.Id == gid)
+                    return entity;
+                else if (entity is Invoice invoice && id is Guid gid1 && invoice.Id == gid1)
+                    return entity;
+                else if (entity is Vehicle vehicle && id is int gid2 && vehicle.Id == gid2)
+                    return entity;
+                else if (entity is Warehouse wh && id is int gid3 && wh.Id == gid3)
                     return entity;
             }
-            return null;
+            throw new Exception("Id not found");
         }
         public static List<TEntity> ReadAll()
         {
@@ -36,18 +36,15 @@ namespace Logistic.ConsoleClient.DataAccess
         }
         public static void Delete(Tid id)
         {
-            foreach (var entity in _list)
-            {
-                if ((object)entity.Id == (object)id)
-                    _list.Remove(entity);
-            }
+            var element = ReadById(id);
+            _list.Remove(element);
         }
-        public static void Update(Tid id,TEntity ent)
+        public static void Update(Tid id, TEntity ent)
         {
             Delete(id);
             Create(ent);
         }
     }
 
-    
+
 }

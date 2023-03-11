@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Logistic.ConsoleClient.DataAccess
 {
@@ -15,7 +10,7 @@ namespace Logistic.ConsoleClient.DataAccess
     }
     public interface IRepository<T> where T : EntityBase
     {
-        void Create(List<T> entities);
+        string Create(List<T> entities);
         List<T> Read(string filename);
     }
 }

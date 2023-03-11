@@ -1,75 +1,109 @@
 ﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
+using Logistic.ConsoleClient.Services;
 
-//void SuccessScenario()
-//{
-
-//    List<Cargo> cargoList = new List<Cargo>();
-
-//    cargoList.Add(new Cargo(1000, 800, "1a"));
-//    cargoList.Add(new Cargo(1500, 500, "2b"));
-//    cargoList.Add(new Cargo(2000, 3000, "3c"));
-//    cargoList.Add(new Cargo(2500, 1000, "4d"));
-//    Warehouse warehouse = new Warehouse();
-//    warehouse.Cargos = cargoList;
-//    warehouse.Id = 111;
-
-//    Warehouse warehouse2 = new Warehouse();
-//    warehouse2.Cargos = cargoList;
-//    warehouse2.Id = 333;
-
-//    XmlRepository<Cargo> jsonRepository = new XmlRepository<Cargo>();
-//    //JsonRepository<Warehouse> jsonRepository = new JsonRepository<Warehouse>();
-
-//    var listW = new List<Warehouse>();
-//    listW.Add(warehouse);
-//    listW.Add(warehouse2);
-
-//    jsonRepository.Create(cargoList);
-//    ;
-
-//}
-//void ExceptionScenario()
-//{
-
-//    List<Cargo> cargoList = new List<Cargo>();
-
-//    cargoList.Add(new Cargo(1000, 800, "1a"));
-//    cargoList.Add(new Cargo(1500, 500, "2b"));
-//    cargoList.Add(new Cargo(2000, 3000, "3c"));
-//    cargoList.Add(new Cargo(2500, 1000, "4d"));
-
-//    XmlRepository<Cargo> jsonRepository = new XmlRepository<Cargo>();
-
-
-//   var a= jsonRepository.Read("Cargo_09_03_2023_11_37.xml");
-//    ;
-//}
-
-try
+Vehicle InputVehicle()
 {
-    //SuccessScenario();
-    // ExceptionScenario();
-    var a = new Cargo(1000, 800, "1a");
-    InMemeoryRepository<Cargo, Guid>.Create(a);
-    InMemeoryRepository<Cargo, Guid>.Create(new Cargo(1500, 500, "2b"));
+    Console.WriteLine("Input vehicle type (Car, Ship, Plane, Train) = ");
+    string type = Console.ReadLine();
+    Enum.TryParse(type, out VehicleType vehicleType);
 
-    var b = InMemeoryRepository<Cargo, Guid>.ReadById(a.Id);
+    Console.WriteLine("Input MaxCargoWeightKg = ");
+    int weight = Convert.ToInt32(Console.ReadLine());
 
-    var list = InMemeoryRepository<Cargo, Guid>.ReadAll();
+    Console.WriteLine("Input MaxCargoVolume = ");
+    double volume = Convert.ToDouble(Console.ReadLine());
 
-    InMemeoryRepository<Cargo, Guid>.Update(a.Id, new Cargo(1500, 500, "2b"));
-
-    InMemeoryRepository<Cargo, Guid>.Delete(a.Id);
-
-
-
-
+    var res = new Vehicle(vehicleType, weight, volume);
+    Console.WriteLine("Id = " + res.Id.ToString());
+    return res;
 }
-catch (Exception e)
+
+Cargo InputCargo()
 {
-    Console.WriteLine(e.Message);
+    Console.WriteLine("Input CargoWeight = ");
+    int weight = Convert.ToInt32(Console.ReadLine());
+
+    Console.WriteLine("Input CargoVolume = ");
+    int volume = Convert.ToInt32(Console.ReadLine());
+
+    var res = new Cargo(weight, volume);
+    Console.WriteLine("Id = " + res.Id.ToString());
+    return res;
 }
-Console.ReadLine();
+
+VehicleService vehicleService = new VehicleService();
+WarehouseService warehouseService = new WarehouseService();
+ReportService<Vehicle> reportService = new ReportService<Vehicle>();
+
+Console.WriteLine(@"add vehicle
+    далі консоль пропонує ввести данні Vehicle (окрім айді)
+add warehouse
+get-all vehicle
+get-all warehouse
+load-cargo vehicle 12 - завантажити Cargo у vehicle
+далі консоль пропонує ввести данні Cargo (окрім айді)
+load-cargo warehouse 15
+unload-cargo vehicle *guid* 11 //додав ще один індекс (UnloadCargo(CargoId, VehicleId) - вивантажи Cargo по айді з Vehicle по Vehicle айді)
+unload-cargo warehouse *guid* 11
+create-report vehicle xml - створює репорт для всіх сутностей що були створені за час роботи додатку (дані накопичені у InMemoryRepository<T>)
+create-report vehicle json
+load-report filename - відображає список vehicle у консолі з репорт файлу (приводячи до формату який зручно читати, тобто НЕ у json, xml формтах)");
+
+while (true)
+{
+    try
+    {
+        Console.WriteLine(">>> Input command");
+        string command = Console.ReadLine();
+        var stringArr = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        switch (stringArr[0] + " " + stringArr[1])
+        {
+            case "add vehicle":
+                vehicleService.Create(InputVehicle());
+                break;
+            case "add warehouse":
+                warehouseService.Create(new Warehouse());
+                break;
+            case "get-all vehicle":
+                Console.WriteLine(vehicleService.GetAll());
+                break;
+            case "get-all warehouse":
+                Console.WriteLine(warehouseService.GetAll());
+                break;
+            case "load-cargo vehicle":
+                vehicleService.LoadCargo(InputCargo(), Convert.ToInt32(stringArr[^1]));
+                break;
+            case "load-cargo warehouse":
+                warehouseService.LoadCargo(InputCargo(), Convert.ToInt32(stringArr[^1]));
+                break;
+            case "unload-cargo vehicle":
+                vehicleService.UnloadCargo(new Guid(stringArr[^2]), Convert.ToInt32(stringArr[^1]));
+                break;
+            case "unload-cargo warehouse":
+                warehouseService.UnloadCargo(new Guid(stringArr[^2]), Convert.ToInt32(stringArr[^1]));
+                break;
+            case "create-report vehicle":
+                Enum.TryParse(stringArr[^1], out ReportType reportType);
+                Console.WriteLine("File Name = " + reportService.CreateReport(reportType));
+                break;
+
+        }
+        //окремо, тому що команда з одного слова(
+        if (stringArr[0] == "load-report")
+        {
+            var list = reportService.LoadReport(stringArr[^1]);
+            foreach (var item in list)
+                Console.WriteLine(item);
+        }
+    }
+
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
+}
+
+
+
 
 

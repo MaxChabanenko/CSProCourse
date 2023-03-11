@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Reflection;
 
 namespace Logistic.ConsoleClient.DataAccess
 {
     internal class JsonRepository<T> : IRepository<T> where T : EntityBase
     {
-        public void Create(List<T> entities)
+        public string Create(List<T> entities)
         {
             StringBuilder sb = new StringBuilder();
             string jsonString;
@@ -20,7 +15,9 @@ namespace Logistic.ConsoleClient.DataAccess
                 jsonString = JsonSerializer.Serialize(entity);
                 sb.AppendLine(jsonString);
             }
-            File.WriteAllText(typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".json", sb.ToString());
+            string fileName = typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".json";
+            File.WriteAllText(fileName, sb.ToString());
+            return fileName;
         }
 
         public List<T> Read(string filename)
@@ -30,7 +27,7 @@ namespace Logistic.ConsoleClient.DataAccess
             Assembly asm = Assembly.GetExecutingAssembly();
             string path = Path.GetDirectoryName(asm.Location);
 
-            var file = File.ReadAllText(path +"\\"+ filename);
+            var file = File.ReadAllText(path + "\\" + filename);
 
             var stringArr = file.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 

@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Logistic.ConsoleClient.DataAccess
 {
     internal class XmlRepository<T> : IRepository<T> where T : EntityBase
     {
-        public void Create(List<T> entities)
+        public string Create(List<T> entities)
         {
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
-            
-            using (FileStream fs = new FileStream(typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".xml", FileMode.OpenOrCreate))
+            string fileName = typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".xml";
+            using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate))
             {
-                    xmlSerializer.Serialize(fs, entities);
+                xmlSerializer.Serialize(fs, entities);
             }
+            return fileName;
         }
 
         public List<T> Read(string filename)
