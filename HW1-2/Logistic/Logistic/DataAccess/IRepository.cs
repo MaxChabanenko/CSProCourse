@@ -2,13 +2,13 @@
 
 namespace Logistic.ConsoleClient.DataAccess
 {
-    [Serializable]
-    public abstract class EntityBase
+    
+    public interface IEntity<Tid>
     {
         [XmlIgnore]
-        public int Id { get; set; }
+        public Tid Id { get; set; }
     }
-    public interface IRepository<T> where T : EntityBase
+    public interface IReportingRepository<T, Tid> where T : IEntity<Tid>
     {
         string Create(List<T> entities);
         List<T> Read(string filename);

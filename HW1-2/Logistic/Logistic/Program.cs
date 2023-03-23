@@ -1,4 +1,5 @@
 ﻿using Logistic.ConsoleClient.Classes;
+using Logistic.ConsoleClient.DataAccess;
 using Logistic.ConsoleClient.Services;
 
 Vehicle InputVehicle()
@@ -31,9 +32,13 @@ Cargo InputCargo()
     return res;
 }
 
-VehicleService vehicleService = new VehicleService();
-WarehouseService warehouseService = new WarehouseService();
-ReportService<Vehicle> reportService = new ReportService<Vehicle>();
+var vehicleRepository = new InMemoryRepository<Vehicle, int>();
+var vehicleService = new VehicleService(vehicleRepository);
+
+var warehouseRepository = new InMemoryRepository<Warehouse, int>();
+var warehouseService = new WarehouseService(warehouseRepository);
+
+ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>(vehicleRepository);
 
 Console.WriteLine(@"add vehicle
     далі консоль пропонує ввести данні Vehicle (окрім айді)
@@ -56,54 +61,113 @@ while (true)
         Console.WriteLine(">>> Input command");
         string command = Console.ReadLine();
         var stringArr = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        switch (stringArr[0] + " " + stringArr[1])
+        switch (stringArr[0])
         {
-            case "add vehicle":
-                vehicleService.Create(InputVehicle());
+            case Commands.ADD_COMMAND:
+                ExecuteAdd(stringArr);
                 break;
-            case "add warehouse":
-                warehouseService.Create(new Warehouse());
+            case Commands.GET_COMMAND:
+                ExecuteGet(stringArr);
                 break;
-            case "get-all vehicle":
-                Console.WriteLine(vehicleService.GetAll());
+            case Commands.LOAD_COMMAND:
+                ExecuteLoad(stringArr);
                 break;
-            case "get-all warehouse":
-                Console.WriteLine(warehouseService.GetAll());
+            case Commands.UNLOAD_COMMAND:
+                ExecuteUnload(stringArr);
                 break;
-            case "load-cargo vehicle":
-                vehicleService.LoadCargo(InputCargo(), Convert.ToInt32(stringArr[^1]));
-                break;
-            case "load-cargo warehouse":
-                warehouseService.LoadCargo(InputCargo(), Convert.ToInt32(stringArr[^1]));
-                break;
-            case "unload-cargo vehicle":
-                vehicleService.UnloadCargo(new Guid(stringArr[^2]), Convert.ToInt32(stringArr[^1]));
-                break;
-            case "unload-cargo warehouse":
-                warehouseService.UnloadCargo(new Guid(stringArr[^2]), Convert.ToInt32(stringArr[^1]));
-                break;
-            case "create-report vehicle":
-                Enum.TryParse(stringArr[^1], out ReportType reportType);
+            case Commands.CREATE_REPORT_COMMAND:
+                Enum.TryParse(stringArr[2], out ReportType reportType);
                 Console.WriteLine("File Name = " + reportService.CreateReport(reportType));
                 break;
-
-        }
-        //окремо, тому що команда з одного слова(
-        if (stringArr[0] == "load-report")
-        {
-            var list = reportService.LoadReport(stringArr[^1]);
-            foreach (var item in list)
-                Console.WriteLine(item);
+            case Commands.LOAD_REPORT_COMMAND:
+                var list = reportService.LoadReport(stringArr[^1]);
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item);
+                }
+                break;
+            default:
+                Console.WriteLine("Unknown command");
+                break;
         }
     }
-
     catch (Exception e)
     {
         Console.WriteLine(e.Message);
     }
 }
 
+void ExecuteAdd(string[] strings)
+{
+    switch (strings[1])
+    {
+        case "vehicle":
+            vehicleService.Create(InputVehicle());
+            break;
+        case "warehouse":
+            warehouseService.Create(new Warehouse());
+            break;
+        default:
+            Console.WriteLine("Unknown argument");
+            break;
+    }
+}
+void ExecuteGet(string[] strings)
+{
+    switch (strings[1])
+    {
+        case "vehicle":
+            Console.WriteLine(vehicleService.GetAll());
+            break;
+        case "warehouse":
+            Console.WriteLine(warehouseService.GetAll());
+            break;
+        default:
+            Console.WriteLine("Unknown argument");
+            break;
+    }
+}
+void ExecuteLoad(string[] strings)
+{
+    switch (strings[1])
+    {
+        case "vehicle":
+            vehicleService.LoadCargo(InputCargo(), Convert.ToInt32(strings[2]));
+            break;
+        case "warehouse":
+            warehouseService.LoadCargo(InputCargo(), Convert.ToInt32(strings[2]));
+            break;
+        default:
+            Console.WriteLine("Unknown argument");
+            break;
+    }
+}
+void ExecuteUnload(string[] strings)
+{
+    switch (strings[1])
+    {
+        case "vehicle":
+            vehicleService.UnloadCargo(new Guid(strings[2]), Convert.ToInt32(strings[3]));
+            break;
+        case "warehouse":
+            warehouseService.UnloadCargo(new Guid(strings[2]), Convert.ToInt32(strings[3]));
+            break;
+        default:
+            Console.WriteLine("Unknown argument");
+            break;
+    }
+}
 
+public static class Commands
+{
+    public const string ADD_COMMAND = "add";
+    public const string GET_COMMAND = "get-all";
+    public const string LOAD_COMMAND = "load-cargo";
+    public const string UNLOAD_COMMAND = "unload-cargo";
+    public const string CREATE_REPORT_COMMAND = "create-report";
+    public const string LOAD_REPORT_COMMAND = "load-report";
+
+}
 
 
 

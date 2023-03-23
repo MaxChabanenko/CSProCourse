@@ -1,41 +1,54 @@
 ﻿using Logistic.ConsoleClient.Classes;
 using Logistic.ConsoleClient.DataAccess;
+using Logistic.ConsoleClient.Models;
 
 namespace Logistic.ConsoleClient.Services
 {
-    internal class WarehouseService : IService<Warehouse>
+    internal class WarehouseService : IService<Warehouse,int>
     {
-        public void Create(Warehouse entity)
+        private InMemoryRepository<Warehouse, int> _warehouseRepository;
+        public WarehouseService(InMemoryRepository<Warehouse, int> warehouseRepository)
         {
-            InMemeoryRepository<Warehouse, int>.Create(entity);
+            _warehouseRepository = warehouseRepository;
+        }
+
+        public void Create(Warehouse warehouse)
+        {
+            _warehouseRepository.Create(warehouse);
         }
 
         public void Delete(int id)
         {
-            InMemeoryRepository<Warehouse, int>.Delete(id);
+            _warehouseRepository.Delete(id);
         }
 
         public List<Warehouse> GetAll()
         {
-            return InMemeoryRepository<Warehouse, int>.ReadAll();
+            return _warehouseRepository.ReadAll();
         }
 
         public Warehouse GetById(int id)
         {
-            return InMemeoryRepository<Warehouse, int>.ReadById(id);
+            return _warehouseRepository.ReadById(id);
         }
 
         public void LoadCargo(Cargo cargo, int id)
         {
             var warehouse = GetById(id);
-            warehouse.Add(cargo);
+            warehouse.Cargos.Add(cargo);
+            _warehouseRepository.Update(warehouse.Id, warehouse);
         }
 
         public Cargo UnloadCargo(Guid cargoId, int id)
         {
             var warehouse = GetById(id);
-            var cargo = warehouse.DeleteByGuid(cargoId);
-            return cargo;
+
+            Cargo cargo = warehouse.Cargos.Find(x => x.Id == cargoId);
+            warehouse.Cargos.Remove(cargo);
+
+            _warehouseRepository.Update(warehouse.Id, warehouse);
+
+            return cargo.CloneJson();
         }
     }
 }

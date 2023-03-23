@@ -1,66 +1,67 @@
 ﻿using Logistic.ConsoleClient.Classes;
 using Logistic.ConsoleClient.DataAccess;
+using Logistic.ConsoleClient.Models;
 
 namespace Logistic.ConsoleClient.Services
 {
-    internal class VehicleService : IService<Vehicle>
+    internal class VehicleService : IService<Vehicle,int>
     {
-        private int currentWeight { get; set; }
-        private double currentVolume { get; set; }
+        private InMemoryRepository<Vehicle, int> _vehicleRepository;
+        public VehicleService(InMemoryRepository<Vehicle, int> vehicleRepository)
+        {
+            _vehicleRepository = vehicleRepository;
+        }
+        public void LoadCargo( Cargo cargoToLoad, int vehicleId)
+        {
+            var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
+
+            var totalWeight = vehicleToUpdate.Cargos.Sum(x => x.Weight) + cargoToLoad.Weight;
+            if (totalWeight > vehicleToUpdate.MaxCargoWeightKg)
+            {
+                throw new Exception("Not enough weight capacity to fit in the " + cargoToLoad.ToString());
+            }
+
+            var totalVolume = vehicleToUpdate.Cargos.Sum(x => x.Volume) + cargoToLoad.Volume;
+            if (totalVolume > vehicleToUpdate.MaxCargoVolume)
+            {
+                throw new Exception("Not enough space to fit in the " + cargoToLoad.ToString());
+            }
+            //здається, пряме звернення до списку порушує інкапсуляцію, але просили винести методи модифікації списку з класу Vehicle
+            //до того ж, якщо список буде приватним, то його не можна буде серіалізувати
+            vehicleToUpdate.Cargos.Add(cargoToLoad);
+            _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);
+        }
+        public Cargo UnloadCargo(Guid cargoId, int vehicleId)
+        {
+            var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
+
+            Cargo cargo = vehicleToUpdate.Cargos.Find(x => x.Id == cargoId);
+            vehicleToUpdate.Cargos.Remove(cargo);
+
+            _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);
+            return cargo.CloneJson();
+        }
+
         public void Create(Vehicle vehicle)
         {
-            InMemeoryRepository<Vehicle, int>.Create(vehicle);
+            _vehicleRepository.Create(vehicle);
         }
 
         public void Delete(int id)
         {
-            InMemeoryRepository<Vehicle, int>.Delete(id);
+            _vehicleRepository.Delete(id);
         }
 
         public List<Vehicle> GetAll()
         {
-            return InMemeoryRepository<Vehicle, int>.ReadAll();
+            return _vehicleRepository.ReadAll();
         }
 
         public Vehicle GetById(int id)
         {
-            return InMemeoryRepository<Vehicle, int>.ReadById(id);
+            return _vehicleRepository.ReadById(id);
         }
 
-        public void LoadCargo(Cargo cargo, int id)
-        {
-            bool overWeight = currentWeight + cargo.Weight > GetById(id).MaxCargoWeightKg;
-            bool overVolume = currentVolume + cargo.Volume > GetById(id).MaxCargoVolume;
-            if (overWeight)
-            {
-                throw new Exception("Not enough weight capacity to fit in the " + cargo.ToString());
-            }
-            if (overVolume)
-            {
-                throw new Exception("Not enough space to fit in the " + cargo.ToString());
-            }
-
-
-            this.currentWeight += cargo.Weight;
-            this.currentVolume += cargo.Volume;
-
-            var vehicle = GetById(id);
-            vehicle.Add(cargo);
-
-        }
-
-
-        public Cargo UnloadCargo(Guid cargoId, int id)
-        {
-
-            var vehicle = GetById(id);
-            var cargo = vehicle.DeleteByGuid(cargoId);
-            if (cargo != null)
-            {
-                this.currentWeight -= cargo.Weight;
-                this.currentVolume -= cargo.Volume;
-            }
-            return cargo;
-        }
+        
     }
 }

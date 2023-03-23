@@ -2,26 +2,12 @@
 
 namespace Logistic.ConsoleClient.Classes
 {
-    public class Cargo : EntityBase//BaseEntityGeneric<Guid>
+    public class Cargo : IEntity<Guid>
     {
         public Cargo() { }
         public Cargo(double Volume, int Weight)
         {
             Id = Guid.NewGuid();
-            this.Volume = Volume;
-            this.Weight = Weight;
-        }
-        public Cargo(double Volume, int Weight, string Code)
-        {
-            Id = Guid.NewGuid();
-            this.Code = Code;
-            this.Volume = Volume;
-            this.Weight = Weight;
-        }
-        public Cargo(Guid id, double Volume, int Weight, string Code)
-        {
-            Id = id;
-            this.Code = Code;
             this.Volume = Volume;
             this.Weight = Weight;
         }
@@ -34,7 +20,7 @@ namespace Logistic.ConsoleClient.Classes
 
         public override string ToString()
         {
-            return "Cargo №" + Id + "\nVolume = " + Volume.ToString() + "\nWeight = " + Weight.ToString();
+            return "Cargo №" + Id + "\nVolume = " + Volume.ToString() + "\nWeight = " + Weight.ToString()+"\n";
         }
 
     }
