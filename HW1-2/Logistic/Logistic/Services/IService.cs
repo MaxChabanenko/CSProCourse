@@ -1,5 +1,6 @@
 ﻿using Logistic.ConsoleClient.Classes;
 using Logistic.ConsoleClient.DataAccess;
+using Logistic.ConsoleClient.Models;
 
 namespace Logistic.ConsoleClient.Services
 {

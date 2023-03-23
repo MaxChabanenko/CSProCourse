@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Logistic.ConsoleClient.Models;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 

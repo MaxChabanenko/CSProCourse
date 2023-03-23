@@ -6,8 +6,8 @@ namespace Logistic.ConsoleClient.Services
 {
     internal class WarehouseService : IService<Warehouse,int>
     {
-        private InMemoryRepository<Warehouse, int> _warehouseRepository;
-        public WarehouseService(InMemoryRepository<Warehouse, int> warehouseRepository)
+        private InMemoryRepository<Warehouse> _warehouseRepository;
+        public WarehouseService(InMemoryRepository<Warehouse> warehouseRepository)
         {
             _warehouseRepository = warehouseRepository;
         }

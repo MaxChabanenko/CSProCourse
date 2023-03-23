@@ -4,13 +4,14 @@ using Logistic.ConsoleClient.Models;
 namespace Logistic.ConsoleClient.DataAccess
 {
 
-    public /*abstract*/ class InMemoryRepository<TEntity, Tid>
-where TEntity : IEntity<Tid>
-where Tid : struct, IEquatable<Tid>
+    public /*abstract*/ class InMemoryRepository<TEntity>
+where TEntity : IEntity<int>
+
     {
         private List<TEntity> _list = new List<TEntity>();
+        private int IdCount = 1;
 
-        public TEntity ReadById(Tid id)
+        public TEntity ReadById(int id)
         {
             var entity = _list.FirstOrDefault(x => x.Id.Equals(id));
             return entity.CloneJson();
@@ -21,17 +22,20 @@ where Tid : struct, IEquatable<Tid>
         }
         public void Create(TEntity ent)
         {
-            _list.Add(ent);
+            var entCopy= ent.CloneJson();
+            entCopy.Id = IdCount++;
+            _list.Add(entCopy);
         }
-        public void Delete(Tid id)
+        public void Delete(int id)
         {
             var element = _list.FirstOrDefault(x => x.Id.Equals(id));
             _list.Remove(element);
+            IdCount--;
         }
-        public void Update(Tid id, TEntity ent)
+        public void Update(int id, TEntity ent)
         {
             Delete(id);
-            Create(ent);
+            Create(ent.CloneJson());
         }
     }
 

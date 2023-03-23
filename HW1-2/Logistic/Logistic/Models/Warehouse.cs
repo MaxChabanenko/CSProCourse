@@ -7,11 +7,9 @@ namespace Logistic.ConsoleClient.Classes
     {
         public Warehouse() 
         {
-            Id = IdNext++;
             Cargos = new List<Cargo>();
         }
-        //авто-інкремент індексу звісно, примітивний, але користувач бачить індекси, тому може легко ними керувати
-        static private int IdNext = 1;
+
         public int Id { get; set; }
         public List<Cargo> Cargos { get; set; }
 

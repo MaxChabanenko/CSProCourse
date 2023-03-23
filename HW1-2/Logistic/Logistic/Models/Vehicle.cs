@@ -12,7 +12,6 @@ namespace Logistic.ConsoleClient.Classes
 
         public Vehicle(VehicleType VehicleType, int MaxCargoWeightKg, double MaxCargoVolume)
         {
-            Id = IdNext++;
             Number = new Random().Next(1, 101).ToString();
             Type = VehicleType;
             this.MaxCargoWeightKg = MaxCargoWeightKg;
@@ -21,10 +20,9 @@ namespace Logistic.ConsoleClient.Classes
             Cargos = new List<Cargo>();
         }
 
-        public Vehicle() { Id = IdNext++; }
+        public Vehicle() {  }
 
         public int Id { get; set; }
-        static private int IdNext = 1;
         public VehicleType Type { get; set; }
         public string Number { get; set; }
         public int MaxCargoWeightKg { get; set; }

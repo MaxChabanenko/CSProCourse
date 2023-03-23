@@ -2,6 +2,9 @@
 using Logistic.ConsoleClient.DataAccess;
 using Logistic.ConsoleClient.Services;
 
+//паралельний інМеморі лічильник, щоб користувач все ж таки знав айді і міг керувати об'єктами з консолі
+int idCounter = 1;
+
 Vehicle InputVehicle()
 {
     Console.WriteLine("Input vehicle type (Car, Ship, Plane, Train) = ");
@@ -15,7 +18,7 @@ Vehicle InputVehicle()
     double volume = Convert.ToDouble(Console.ReadLine());
 
     var res = new Vehicle(vehicleType, weight, volume);
-    Console.WriteLine("Id = " + res.Id.ToString());
+    Console.WriteLine("Id = " + idCounter++);
     return res;
 }
 
@@ -32,13 +35,13 @@ Cargo InputCargo()
     return res;
 }
 
-var vehicleRepository = new InMemoryRepository<Vehicle, int>();
+var vehicleRepository = new InMemoryRepository<Vehicle>();
 var vehicleService = new VehicleService(vehicleRepository);
 
-var warehouseRepository = new InMemoryRepository<Warehouse, int>();
+var warehouseRepository = new InMemoryRepository<Warehouse>();
 var warehouseService = new WarehouseService(warehouseRepository);
 
-ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>(vehicleRepository);
+ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>();
 
 Console.WriteLine(@"add vehicle
     далі консоль пропонує ввести данні Vehicle (окрім айді)
@@ -77,7 +80,8 @@ while (true)
                 break;
             case Commands.CREATE_REPORT_COMMAND:
                 Enum.TryParse(stringArr[2], out ReportType reportType);
-                Console.WriteLine("File Name = " + reportService.CreateReport(reportType));
+                var entities = vehicleService.GetAll();
+                Console.WriteLine("File Name = " + reportService.CreateReport(entities,reportType));
                 break;
             case Commands.LOAD_REPORT_COMMAND:
                 var list = reportService.LoadReport(stringArr[^1]);

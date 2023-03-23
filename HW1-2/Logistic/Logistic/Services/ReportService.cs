@@ -1,4 +1,5 @@
 ﻿using Logistic.ConsoleClient.DataAccess;
+using Logistic.ConsoleClient.Models;
 
 namespace Logistic.ConsoleClient.Services
 {
@@ -9,21 +10,23 @@ namespace Logistic.ConsoleClient.Services
         JsonRepository<T, Tid> JsonRepository = new JsonRepository<T, Tid>();
         XmlRepository<T, Tid> XmlRepository = new XmlRepository<T, Tid>();
 
-        private InMemoryRepository<T, Tid> _memoryRepository;
-        public ReportService(InMemoryRepository<T, Tid> memoryRepository)
-        {
-            _memoryRepository = memoryRepository;
-        }
+        //якщо ми передаємо список з клієнтської сторони, як ви зазначили у останньому коментарі, то цей код тут непотрібен
 
-        public string CreateReport(ReportType type)
+        //private InMemoryRepository<T, Tid> _memoryRepository;
+        //public ReportService(InMemoryRepository<T, Tid> memoryRepository)
+        //{
+        //    _memoryRepository = memoryRepository;
+        //}
+
+        public string CreateReport(List<T> entities, ReportType type)
         {
             if (type == ReportType.json)
             {
-                return JsonRepository.Create(_memoryRepository.ReadAll());
+                return JsonRepository.Create(entities);
             }
             else
             {
-                return XmlRepository.Create(_memoryRepository.ReadAll());
+                return XmlRepository.Create(entities);
             }
         }
         public List<T> LoadReport(string fileName)

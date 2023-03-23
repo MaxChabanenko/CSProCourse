@@ -6,8 +6,8 @@ namespace Logistic.ConsoleClient.Services
 {
     internal class VehicleService : IService<Vehicle,int>
     {
-        private InMemoryRepository<Vehicle, int> _vehicleRepository;
-        public VehicleService(InMemoryRepository<Vehicle, int> vehicleRepository)
+        private InMemoryRepository<Vehicle> _vehicleRepository;
+        public VehicleService(InMemoryRepository<Vehicle> vehicleRepository)
         {
             _vehicleRepository = vehicleRepository;
         }

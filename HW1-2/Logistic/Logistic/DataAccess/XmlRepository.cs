@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Xml.Serialization;
+using Logistic.ConsoleClient.Models;
+
 
 namespace Logistic.ConsoleClient.DataAccess
 {
