@@ -31,7 +31,6 @@ where TEntity : IEntity<int>
         {
             var element = _list.FirstOrDefault(x => x.Id.Equals(id));
             _list.Remove(element);
-            IdCount--;
         }
         public void Update(int id, TEntity ent)
         {
