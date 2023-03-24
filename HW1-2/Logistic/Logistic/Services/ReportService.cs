@@ -7,16 +7,14 @@ namespace Logistic.ConsoleClient.Services
 
     internal class ReportService<T, Tid> where T : IEntity<Tid> where Tid : struct, IEquatable<Tid>
     {
-        JsonRepository<T, Tid> JsonRepository = new JsonRepository<T, Tid>();
-        XmlRepository<T, Tid> XmlRepository = new XmlRepository<T, Tid>();
+        private readonly IReportingRepository<T, Tid> JsonRepository;
+        private readonly IReportingRepository<T, Tid> XmlRepository;
 
-        //якщо ми передаємо список з клієнтської сторони, як ви зазначили у останньому коментарі, то цей код тут непотрібен
-
-        //private InMemoryRepository<T, Tid> _memoryRepository;
-        //public ReportService(InMemoryRepository<T, Tid> memoryRepository)
-        //{
-        //    _memoryRepository = memoryRepository;
-        //}
+        public ReportService(IReportingRepository<T, Tid> jsonReportingService, IReportingRepository<T, Tid> xmlRepotingRepository)
+        {
+            XmlRepository = xmlRepotingRepository;
+            JsonRepository = jsonReportingService;
+        }
 
         public string CreateReport(List<T> entities, ReportType type)
         {

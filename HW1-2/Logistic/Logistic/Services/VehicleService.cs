@@ -26,8 +26,7 @@ namespace Logistic.ConsoleClient.Services
             {
                 throw new Exception("Not enough space to fit in the " + cargoToLoad.ToString());
             }
-            //здається, пряме звернення до списку порушує інкапсуляцію, але просили винести методи модифікації списку з класу Vehicle
-            //до того ж, якщо список буде приватним, то його не можна буде серіалізувати
+
             vehicleToUpdate.Cargos.Add(cargoToLoad);
             _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);
         }
@@ -42,9 +41,9 @@ namespace Logistic.ConsoleClient.Services
             return cargo.CloneJson();
         }
 
-        public void Create(Vehicle vehicle)
+        public int Create(Vehicle vehicle)
         {
-            _vehicleRepository.Create(vehicle);
+          return _vehicleRepository.Create(vehicle);
         }
 
         public void Delete(int id)

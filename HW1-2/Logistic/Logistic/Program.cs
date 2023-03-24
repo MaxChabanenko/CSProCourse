@@ -2,9 +2,10 @@
 using Logistic.ConsoleClient.DataAccess;
 using Logistic.ConsoleClient.Services;
 
-//паралельний інМеморі лічильник, щоб користувач все ж таки знав айді і міг керувати об'єктами з консолі
-int idCounter = 1;
-
+Warehouse InputWarehouse()
+{
+    return new Warehouse();
+}
 Vehicle InputVehicle()
 {
     Console.WriteLine("Input vehicle type (Car, Ship, Plane, Train) = ");
@@ -18,7 +19,7 @@ Vehicle InputVehicle()
     double volume = Convert.ToDouble(Console.ReadLine());
 
     var res = new Vehicle(vehicleType, weight, volume);
-    Console.WriteLine("Id = " + idCounter++);
+    
     return res;
 }
 
@@ -41,7 +42,7 @@ var vehicleService = new VehicleService(vehicleRepository);
 var warehouseRepository = new InMemoryRepository<Warehouse>();
 var warehouseService = new WarehouseService(warehouseRepository);
 
-ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>();
+ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>(new JsonRepository<Vehicle, int>(),new XmlRepository<Vehicle, int>());
 
 Console.WriteLine(@"add vehicle
     далі консоль пропонує ввести данні Vehicle (окрім айді)
@@ -106,10 +107,10 @@ void ExecuteAdd(string[] strings)
     switch (strings[1])
     {
         case "vehicle":
-            vehicleService.Create(InputVehicle());
+            Console.WriteLine("Id = " + vehicleService.Create(InputVehicle()));
             break;
         case "warehouse":
-            warehouseService.Create(new Warehouse());
+            Console.WriteLine("Id = " + warehouseService.Create(InputWarehouse()));
             break;
         default:
             Console.WriteLine("Unknown argument");

@@ -12,9 +12,9 @@ namespace Logistic.ConsoleClient.Services
             _warehouseRepository = warehouseRepository;
         }
 
-        public void Create(Warehouse warehouse)
+        public int Create(Warehouse warehouse)
         {
-            _warehouseRepository.Create(warehouse);
+          return _warehouseRepository.Create(warehouse);
         }
 
         public void Delete(int id)

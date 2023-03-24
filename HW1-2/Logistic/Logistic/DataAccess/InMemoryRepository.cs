@@ -20,11 +20,12 @@ where TEntity : IEntity<int>
         {
             return _list.CloneJson();
         }
-        public void Create(TEntity ent)
+        public int Create(TEntity ent)
         {
             var entCopy= ent.CloneJson();
             entCopy.Id = IdCount++;
             _list.Add(entCopy);
+            return entCopy.Id;
         }
         public void Delete(int id)
         {

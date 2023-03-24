@@ -6,7 +6,7 @@ namespace Logistic.ConsoleClient.Services
 {
     internal interface IService<T,Tid> where T : IEntity<Tid>
     {
-        void Create(T entity);
+        int Create(T entity);
         T GetById(int id);
         List<T> GetAll();
         void Delete(int id);
