@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="2nznsuw4.wn5~" />
+    <None Remove="edaeulhb.e45~" />
+    <None Remove="kldoxsom.jpp~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logistic.Core\Logistic.Core.csproj" />
+    <ProjectReference Include="..\Logistic.DAL\Logistic.DAL.csproj" />
+    <ProjectReference Include="..\Logistic.Models\Logistic.Models.csproj" />
+  </ItemGroup>
+
+</Project>

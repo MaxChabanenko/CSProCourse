@@ -1,6 +1,6 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Services;
+﻿using Logistic.Models;
+using Logistic.Core;
+using Logistic.DAL;
 
 Warehouse InputWarehouse()
 {
@@ -10,7 +10,10 @@ Vehicle InputVehicle()
 {
     Console.WriteLine("Input vehicle type (Car, Ship, Plane, Train) = ");
     string type = Console.ReadLine();
-    Enum.TryParse(type, out VehicleType vehicleType);
+
+    var isParsed = Enum.TryParse(type, out VehicleType vehicleType) && Enum.IsDefined(typeof(VehicleType), vehicleType);
+    if (!isParsed)
+        throw new Exception("No such vehicle type");
 
     Console.WriteLine("Input MaxCargoWeightKg = ");
     int weight = Convert.ToInt32(Console.ReadLine());
@@ -19,7 +22,7 @@ Vehicle InputVehicle()
     double volume = Convert.ToDouble(Console.ReadLine());
 
     var res = new Vehicle(vehicleType, weight, volume);
-    
+
     return res;
 }
 
@@ -39,7 +42,7 @@ Cargo InputCargo()
 var vehicleRepository = new InMemoryRepository<Vehicle>();
 var vehicleService = new VehicleService(vehicleRepository);
 
-var warehouseRepository = new InMemoryRepository<Warehouse>();
+InMemoryRepository<Warehouse> warehouseRepository = new InMemoryRepository<Warehouse>();
 var warehouseService = new WarehouseService(warehouseRepository);
 
 ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>(new JsonRepository<Vehicle, int>(),new XmlRepository<Vehicle, int>());

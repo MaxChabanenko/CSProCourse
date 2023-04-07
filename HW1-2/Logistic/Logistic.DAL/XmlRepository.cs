@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Xml.Serialization;
-using Logistic.ConsoleClient.Models;
+using Logistic.Models;
+using Logistic.Core;
 
-
-namespace Logistic.ConsoleClient.DataAccess
+namespace Logistic.DAL
 {
-    internal class XmlRepository<T, Tid> : IReportingRepository<T, Tid> where T : IEntity<Tid>
+    public class XmlRepository<T, Tid> : IReportingRepository<T, Tid> where T : IEntity<Tid>
     {
         public string Create(List<T> entities)
         {

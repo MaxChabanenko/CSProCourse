@@ -1,20 +1,18 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.Services
+namespace Logistic.Core
 {
-    internal class WarehouseService : IService<Warehouse,int>
+    public class WarehouseService : IService<Warehouse, int>
     {
-        private InMemoryRepository<Warehouse> _warehouseRepository;
-        public WarehouseService(InMemoryRepository<Warehouse> warehouseRepository)
+        private IRepository<Warehouse> _warehouseRepository;
+        public WarehouseService(IRepository<Warehouse> warehouseRepository)
         {
             _warehouseRepository = warehouseRepository;
         }
 
         public int Create(Warehouse warehouse)
         {
-          return _warehouseRepository.Create(warehouse);
+            return _warehouseRepository.Create(warehouse);
         }
 
         public void Delete(int id)

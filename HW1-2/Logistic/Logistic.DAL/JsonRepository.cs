@@ -1,11 +1,11 @@
-﻿using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
+using Logistic.Core;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 
-namespace Logistic.ConsoleClient.DataAccess
+namespace Logistic.DAL
 {
-    internal class JsonRepository<T, Tid> : IReportingRepository<T, Tid> where T : IEntity<Tid>
+    public class JsonRepository<T, Tid> : IReportingRepository<T, Tid> where T : IEntity<Tid>
     {
         public string Create(List<T> entities)
         {

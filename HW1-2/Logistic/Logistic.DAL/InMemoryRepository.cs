@@ -1,10 +1,10 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Core;
+using Logistic.Models;
 
-namespace Logistic.ConsoleClient.DataAccess
+namespace Logistic.DAL
 {
 
-    public /*abstract*/ class InMemoryRepository<TEntity>
+    public class InMemoryRepository<TEntity> : IRepository<TEntity>
 where TEntity : IEntity<int>
 
     {

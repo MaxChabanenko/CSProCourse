@@ -1,17 +1,15 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.Services
+namespace Logistic.Core
 {
-    internal class VehicleService : IService<Vehicle,int>
+    public class VehicleService : IService<Vehicle, int>
     {
-        private InMemoryRepository<Vehicle> _vehicleRepository;
-        public VehicleService(InMemoryRepository<Vehicle> vehicleRepository)
+        private IRepository<Vehicle> _vehicleRepository;
+        public VehicleService(IRepository<Vehicle> vehicleRepository)
         {
             _vehicleRepository = vehicleRepository;
         }
-        public void LoadCargo( Cargo cargoToLoad, int vehicleId)
+        public void LoadCargo(Cargo cargoToLoad, int vehicleId)
         {
             var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
 
@@ -43,7 +41,7 @@ namespace Logistic.ConsoleClient.Services
 
         public int Create(Vehicle vehicle)
         {
-          return _vehicleRepository.Create(vehicle);
+            return _vehicleRepository.Create(vehicle);
         }
 
         public void Delete(int id)
@@ -61,6 +59,6 @@ namespace Logistic.ConsoleClient.Services
             return _vehicleRepository.ReadById(id);
         }
 
-        
+
     }
 }
