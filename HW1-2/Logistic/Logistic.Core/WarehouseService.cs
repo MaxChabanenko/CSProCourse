@@ -42,6 +42,10 @@ namespace Logistic.Core
             var warehouse = GetById(id);
 
             Cargo cargo = warehouse.Cargos.Find(x => x.Id == cargoId);
+            if (cargo is null)
+            {
+                throw new Exception("Cargo not found");
+            }
             warehouse.Cargos.Remove(cargo);
 
             _warehouseRepository.Update(warehouse.Id, warehouse);

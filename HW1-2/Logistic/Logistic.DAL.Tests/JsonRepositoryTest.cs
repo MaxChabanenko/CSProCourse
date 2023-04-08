@@ -1,6 +1,6 @@
-namespace Logistic.Core.Tests
+namespace Logistic.DAL.Tests
 {
-    public class UnitTest1
+    public class JsonRepositoryTest
     {
         [Fact]
         public void Test1()

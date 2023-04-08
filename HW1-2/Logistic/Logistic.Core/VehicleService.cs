@@ -28,11 +28,16 @@ namespace Logistic.Core
             vehicleToUpdate.Cargos.Add(cargoToLoad);
             _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);
         }
+
         public Cargo UnloadCargo(Guid cargoId, int vehicleId)
         {
             var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
 
             Cargo cargo = vehicleToUpdate.Cargos.Find(x => x.Id == cargoId);
+            if (cargo is null)
+            {
+                throw new Exception("Cargo not found");
+            }
             vehicleToUpdate.Cargos.Remove(cargo);
 
             _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);

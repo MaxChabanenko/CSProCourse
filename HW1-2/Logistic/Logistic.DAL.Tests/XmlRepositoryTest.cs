@@ -1,6 +1,6 @@
 namespace Logistic.DAL.Tests
 {
-    public class UnitTest1
+    public class XmlRepositoryTest
     {
         [Fact]
         public void Test1()

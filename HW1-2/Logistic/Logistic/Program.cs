@@ -1,6 +1,7 @@
 ﻿using Logistic.Models;
 using Logistic.Core;
 using Logistic.DAL;
+using AutoFixture;
 
 Warehouse InputWarehouse()
 {
@@ -46,6 +47,7 @@ InMemoryRepository<Warehouse> warehouseRepository = new InMemoryRepository<Wareh
 var warehouseService = new WarehouseService(warehouseRepository);
 
 ReportService<Vehicle,int> reportService = new ReportService<Vehicle, int>(new JsonRepository<Vehicle, int>(),new XmlRepository<Vehicle, int>());
+
 
 Console.WriteLine(@"add vehicle
     далі консоль пропонує ввести данні Vehicle (окрім айді)
