@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.18.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="NSubstitute" Version="5.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -25,6 +26,21 @@
   <ItemGroup>
     <ProjectReference Include="..\Logistic.Core\Logistic.Core.csproj" />
     <ProjectReference Include="..\Logistic.DAL\Logistic.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Vehicle_08_04_2023_19_39.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Vehicle_08_04_2023_19_39.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Warehouse_08_04_2023_19_39.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Warehouse_08_04_2023_19_39.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

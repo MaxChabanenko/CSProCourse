@@ -88,7 +88,7 @@ namespace Logistic.Core.Tests
         public void LoadVehicleReport_Default_CallExpectedMethods(string extension)
         {
             //Act
-            _vehicleReportService.LoadReport(Path.Combine("Resorces", "Vehicle_08_04_2023_19_39"+extension));
+            _vehicleReportService.LoadReport(Path.Combine("Resources", "Vehicle_08_04_2023_19_39"+extension));
             //Assert
             _vehicleReportingRepository.Received(1).Read(Arg.Any<string>());
             
@@ -101,7 +101,7 @@ namespace Logistic.Core.Tests
         public void LoadWarehouseReport_Default_CallExpectedMethods(string extension)
         {
             //Act
-            _vehicleReportService.LoadReport(Path.Combine("Resorces", "Warehouse_08_04_2023_19_39" + extension));
+            _vehicleReportService.LoadReport(Path.Combine("Resources", "Warehouse_08_04_2023_19_39" + extension));
             //Assert
             _vehicleReportingRepository.Received(1).Read(Arg.Any<string>());
         }
@@ -110,7 +110,7 @@ namespace Logistic.Core.Tests
         public void LoadReport_InvalidExtension_ThrowException()
         {
             //Act
-            Action act = () => _vehicleReportService.LoadReport(Path.Combine("Resorces", "Vehicle_08_04_2023_19_39.doc"));
+            Action act = () => _vehicleReportService.LoadReport(Path.Combine("Resources", "Vehicle_08_04_2023_19_39.doc"));
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);
