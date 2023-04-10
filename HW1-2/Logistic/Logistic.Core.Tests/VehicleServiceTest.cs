@@ -1,3 +1,4 @@
+using AutoFixture;
 using Logistic.Models;
 using NSubstitute;
 
@@ -14,23 +15,24 @@ namespace Logistic.Core.Tests
             _vehicleService = new VehicleService(_vehicleRespository);
         }
         [Fact]
-        public void LoadCargo_WhenCargoFits_CallExpectedMethods()
+        public void LoadCargo_WhenCargoFits_ShouldCallExpectedMethods()
         {
             //Arrange
-            var vehicle = new Vehicle()
-            {
-                MaxCargoVolume = 10,
-                MaxCargoWeightKg = 10,
-                Cargos = new List<Cargo>()
-            };
+            int volumeAndWeight = 10;
+            int vehicleId = 1;
 
-            _vehicleRespository.ReadById(Arg.Any<int>()).Returns(vehicle);
+            var fix = new Fixture();
+            var vehicle = fix.Create<Vehicle>();
+            vehicle.MaxCargoVolume = volumeAndWeight;
+            vehicle.MaxCargoWeightKg = volumeAndWeight;
+            vehicle.Cargos = new List<Cargo>();
 
-            var cargo = new Cargo(10, 10);
+            _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
+            var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
 
             //Act
-            _vehicleService.LoadCargo(cargo, 1);
+            _vehicleService.LoadCargo(cargo, vehicleId);
 
             //Assert
             _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
@@ -42,20 +44,22 @@ namespace Logistic.Core.Tests
         public void LoadCargo_WhenCargoDoesntFit_ThrowExeption()
         {
             //Arrange
-            var vehicle = new Vehicle()
-            {
-                MaxCargoVolume = 1,
-                MaxCargoWeightKg = 1,
-                Cargos = new List<Cargo>()
-            };
+            int volumeAndWeight = 10;
+            int cargoExtraVolumeAndWeight = 100;
+            int vehicleId = 1;
 
-            _vehicleRespository.ReadById(Arg.Any<int>()).Returns(vehicle);
+            var fix = new Fixture();
+            var vehicle = fix.Create<Vehicle>();
+            vehicle.MaxCargoVolume = volumeAndWeight;
+            vehicle.MaxCargoWeightKg = volumeAndWeight;
+            vehicle.Cargos = new List<Cargo>();
 
-            var cargo = new Cargo(10, 10);
+            _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
+            var cargo = new Cargo(cargoExtraVolumeAndWeight, cargoExtraVolumeAndWeight);
 
             //Act
-            Action act = () => _vehicleService.LoadCargo(cargo, 1);
+            Action act = () => _vehicleService.LoadCargo(cargo, vehicleId);
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);
@@ -67,45 +71,38 @@ namespace Logistic.Core.Tests
         public void LoadCargo_VehicleIdNotFound_ThrowExeption()
         {
             //Arrange
-            var cargo = new Cargo(10, 10);
+            int volumeAndWeight = 10;
+            int vehicleId = 1;
+
+            var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
 
             //Act
-            Action act = () => _vehicleService.LoadCargo(cargo, 1);
+            Action act = () => _vehicleService.LoadCargo(cargo, vehicleId);
 
             //Assert
             NullReferenceException exception = Assert.Throws<NullReferenceException>(act);
             _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
         }
 
-        [Fact]
-        public void LoadCargo_InvalidCargo_ThrowExeption()
-        {
-            //Arrange
-            Cargo cargo;
-
-            //Act
-            Action act = () => cargo = new Cargo(-10, 0);
-
-            //Assert
-            ArgumentException exception = Assert.Throws<ArgumentException>(act);
-            Assert.Contains("Invalid Cargo parameter: ", exception.Message);
-        }
 
         [Fact]
-        public void UnloadCargo_Successful_CallExpectedMethods()
+        public void UnloadCargo_WhenDefaultExecution_ShouldCallExpectedMethods()
         {
             //Arrange
-            var cargo = new Cargo(10, 10);
-            var vehicle = new Vehicle()
-            {
-                MaxCargoVolume = 10,
-                MaxCargoWeightKg = 10,
-                Cargos = new List<Cargo> { cargo }
-            };
-            _vehicleRespository.ReadById(Arg.Any<int>()).Returns(vehicle);
+            int volumeAndWeight = 10;
+            int vehicleId = 1;
+
+            var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
+
+            var fix = new Fixture();
+            var vehicle = fix.Create<Vehicle>();
+            vehicle.MaxCargoVolume = volumeAndWeight;
+            vehicle.MaxCargoWeightKg = volumeAndWeight;
+            vehicle.Cargos = new List<Cargo> { cargo };
+            _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
             //Act
-            var res = _vehicleService.UnloadCargo(cargo.Id, 1);
+            var res = _vehicleService.UnloadCargo(cargo.Id, vehicleId);
 
             //Assert
             _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
@@ -115,20 +112,22 @@ namespace Logistic.Core.Tests
         }
 
         [Fact]
-        public void UnloadCargo_NotFoundCargo_ThrowExeption()
+        public void UnloadCargo_WhenCargoNotFound_ThrowExeption()
         {
             //Arrange
-            
-            var vehicle = new Vehicle()
-            {
-                MaxCargoVolume = 10,
-                MaxCargoWeightKg = 10,
-                Cargos = new List<Cargo>()
-            };
-            _vehicleRespository.ReadById(Arg.Any<int>()).Returns(vehicle);
+            int volumeAndWeight = 10;
+            int vehicleId = 1;
+
+            var fix = new Fixture();
+            var vehicle = fix.Create<Vehicle>();
+            vehicle.MaxCargoVolume = volumeAndWeight;
+            vehicle.MaxCargoWeightKg = volumeAndWeight;
+            vehicle.Cargos = new List<Cargo>();
+
+            _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
             //Act
-            Action act = () => _vehicleService.UnloadCargo(Guid.NewGuid(), 1);
+            Action act = () => _vehicleService.UnloadCargo(Guid.NewGuid(), vehicleId);
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);

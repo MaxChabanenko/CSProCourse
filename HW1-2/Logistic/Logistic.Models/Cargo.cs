@@ -6,11 +6,6 @@ namespace Logistic.Models
         public Cargo() { }
         public Cargo(double Volume, int Weight)
         {
-            if (Volume<=0)
-                throw new ArgumentException("Invalid Cargo parameter: ", nameof(Volume));
-            if (Weight<=0)
-                throw new ArgumentException("Invalid Cargo parameter: ", nameof(Weight));
-
             Id = Guid.NewGuid();
             this.Volume = Volume;
             this.Weight = Weight;

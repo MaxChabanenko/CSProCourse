@@ -32,6 +32,11 @@ namespace Logistic.Core
 
         public void LoadCargo(Cargo cargo, int id)
         {
+            if (cargo.Volume <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargo.Volume));
+            if (cargo.Weight <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargo.Weight));
+
             var warehouse = GetById(id);
             warehouse.Cargos.Add(cargo);
             _warehouseRepository.Update(warehouse.Id, warehouse);

@@ -12,7 +12,7 @@ namespace Logistic.DAL.Tests
             _inMemoryRepository = Substitute.For<InMemoryRepository<Vehicle>>();
         }
         [Fact]
-        public void CreateAndReadById_Default_ReturnsClone()
+        public void ReadById_WhenDefaultExecution_ReturnsClone()
         {
             //Arrange
             var fix = new Fixture();
@@ -27,7 +27,7 @@ namespace Logistic.DAL.Tests
             Assert.NotEqual(vehicle,res);
         }
         [Fact]
-        public void CreateAndDelete_Default_CallsExpectedMethods()
+        public void Delete_WhenDefaultExecution_ShouldCallExpectedMethods()
         {
             //Arrange
             var fix = new Fixture();
@@ -41,20 +41,20 @@ namespace Logistic.DAL.Tests
             Assert.Equal(0, _inMemoryRepository.ReadAll().Count());
         }
         [Fact]
-        public void Update_Default_CallsExpectedMethods()
+        public void Update_WhenDefaultExecution_ShouldCallExpectedMethods()
         {
             //Arrange
             var fix = new Fixture();
-            var vehicle = fix.Create<Vehicle>();
-            var vehicle2 = fix.Create<Vehicle>();
-            int id = _inMemoryRepository.Create(vehicle);
+            var vehicleToUpdate = fix.Create<Vehicle>();
+            var newVehicle = fix.Create<Vehicle>();
+            int id = _inMemoryRepository.Create(vehicleToUpdate);
 
             //Act
-            _inMemoryRepository.Update(id,vehicle2);
+            _inMemoryRepository.Update(id,newVehicle);
 
             //Assert
-            _inMemoryRepository.Received(1).Delete(Arg.Any<int>());
-            _inMemoryRepository.Received(1).Create(vehicle2);
+            _inMemoryRepository.Received(1).Delete(id);
+            _inMemoryRepository.Received(1).Create(newVehicle);
 
         }
 

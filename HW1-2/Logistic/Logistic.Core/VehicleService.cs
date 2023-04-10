@@ -11,6 +11,12 @@ namespace Logistic.Core
         }
         public void LoadCargo(Cargo cargoToLoad, int vehicleId)
         {
+            if (cargoToLoad.Volume <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargoToLoad.Volume));
+            if (cargoToLoad.Weight <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargoToLoad.Weight));
+
+
             var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
 
             var totalWeight = vehicleToUpdate.Cargos.Sum(x => x.Weight) + cargoToLoad.Weight;

@@ -14,18 +14,19 @@ namespace Logistic.Core.Tests
             _warehouseService = new WarehouseService(_warehouseRespository);
         }
         [Fact]
-        public void LoadCargo_Default_CallExpectedMethods()
+        public void LoadCargo_WhenDefaultExecution_ShouldCallExpectedMethods()
         {
             //Arrange
+            int volumeAndWeight = 10;
+            int warehouseId = 1;
+
             var warehouse = new Warehouse();
+            _warehouseRespository.ReadById(warehouseId).Returns(warehouse);
 
-            _warehouseRespository.ReadById(Arg.Any<int>()).Returns(warehouse);
-
-            var cargo = new Cargo(10, 10);
-
+            var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
 
             //Act
-            _warehouseService.LoadCargo(cargo, 1);
+            _warehouseService.LoadCargo(cargo, warehouseId);
 
             //Assert
             _warehouseRespository.Received(1).ReadById(Arg.Any<int>());
@@ -34,13 +35,16 @@ namespace Logistic.Core.Tests
         }
 
         [Fact]
-        public void LoadCargo_WarehouseIdNotFound_ThrowExeption()
+        public void LoadCargo_WhenWarehouseIdNotFound_ThrowExeption()
         {
             //Arrange
-            var cargo = new Cargo(10, 10);
+            int volumeAndWeight = 10;
+            int warehouseId = 1;
+
+            var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
 
             //Act
-            Action act = () => _warehouseService.LoadCargo(cargo, 1);
+            Action act = () => _warehouseService.LoadCargo(cargo, warehouseId);
 
             //Assert
             NullReferenceException exception = Assert.Throws<NullReferenceException>(act);
@@ -48,32 +52,22 @@ namespace Logistic.Core.Tests
         }
 
         [Fact]
-        public void LoadCargo_InvalidCargo_ThrowExeption()
+        public void UnloadCargo_WhenDefaultExecution_ShouldCallExpectedMethods()
         {
             //Arrange
-            Cargo cargo;
+            int volumeAndWeight = 10;
+            int warehouseId = 1;
 
-            //Act
-            Action act = () => cargo = new Cargo(-10, 0);
+            var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
 
-            //Assert
-            ArgumentException exception = Assert.Throws<ArgumentException>(act);
-            Assert.Contains("Invalid Cargo parameter: ", exception.Message);
-        }
-
-        [Fact]
-        public void UnloadCargo_Successful_CallExpectedMethods()
-        {
-            //Arrange
-            var cargo = new Cargo(10, 10);
             var warehouse = new Warehouse()
             {
                 Cargos = new List<Cargo> { cargo }
             };
-            _warehouseRespository.ReadById(Arg.Any<int>()).Returns(warehouse);
+            _warehouseRespository.ReadById(warehouseId).Returns(warehouse);
 
             //Act
-            var res = _warehouseService.UnloadCargo(cargo.Id, 1);
+            var res = _warehouseService.UnloadCargo(cargo.Id, warehouseId);
 
             //Assert
             _warehouseRespository.Received(1).ReadById(Arg.Any<int>());
@@ -83,14 +77,17 @@ namespace Logistic.Core.Tests
         }
 
         [Fact]
-        public void UnloadCargo_NotFoundCargo_ThrowExeption()
+        public void UnloadCargo_WhenCargoNotFound_ThrowExeption()
         {
             //Arrange
+            int warehouseId = 1;
+
             var warehouse = new Warehouse();
-            _warehouseRespository.ReadById(Arg.Any<int>()).Returns(warehouse);
+
+            _warehouseRespository.ReadById(warehouseId).Returns(warehouse);
 
             //Act
-            Action act = () => _warehouseService.UnloadCargo(Guid.NewGuid(), 1);
+            Action act = () => _warehouseService.UnloadCargo(Guid.NewGuid(), warehouseId);
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);
