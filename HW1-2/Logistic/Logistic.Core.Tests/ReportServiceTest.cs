@@ -37,10 +37,12 @@ namespace Logistic.Core.Tests
         [InlineData(".json")]
         public void LoadVehicleReport_WhenDefaultExecution_ShouldCallExpectedMethods(string extension)
         {
+            //Arrange
+            string filename = Path.Combine("Resources", "Vehicle_08_04_2023_19_39" + extension);
             //Act
-            _vehicleReportService.LoadReport(Path.Combine("Resources", "Vehicle_08_04_2023_19_39"+extension));
+            _vehicleReportService.LoadReport(filename);
             //Assert
-            _vehicleReportingRepository.Received(1).Read(Arg.Any<string>());  
+            _vehicleReportingRepository.Received(1).Read(filename);  
         }
 
         [Fact]

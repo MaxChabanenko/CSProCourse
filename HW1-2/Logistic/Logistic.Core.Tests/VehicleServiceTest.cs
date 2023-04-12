@@ -26,6 +26,7 @@ namespace Logistic.Core.Tests
             vehicle.MaxCargoVolume = volumeAndWeight;
             vehicle.MaxCargoWeightKg = volumeAndWeight;
             vehicle.Cargos = new List<Cargo>();
+            vehicle.Id = vehicleId;
 
             _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
@@ -35,8 +36,8 @@ namespace Logistic.Core.Tests
             _vehicleService.LoadCargo(cargo, vehicleId);
 
             //Assert
-            _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
-            _vehicleRespository.Received(1).Update(Arg.Any<int>(), Arg.Any<Vehicle>());
+            _vehicleRespository.Received(1).ReadById(vehicleId);
+            _vehicleRespository.Received(1).Update(vehicleId, vehicle);
             Assert.Equal(vehicle.Cargos.FirstOrDefault(), cargo);
         }
 
@@ -53,6 +54,8 @@ namespace Logistic.Core.Tests
             vehicle.MaxCargoVolume = volumeAndWeight;
             vehicle.MaxCargoWeightKg = volumeAndWeight;
             vehicle.Cargos = new List<Cargo>();
+            vehicle.Id = vehicleId;
+
 
             _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
@@ -63,7 +66,7 @@ namespace Logistic.Core.Tests
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);
-            _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
+            _vehicleRespository.Received(1).ReadById(vehicleId);
             Assert.Contains("Not enough", exception.Message);
         }
 
@@ -99,14 +102,17 @@ namespace Logistic.Core.Tests
             vehicle.MaxCargoVolume = volumeAndWeight;
             vehicle.MaxCargoWeightKg = volumeAndWeight;
             vehicle.Cargos = new List<Cargo> { cargo };
+            vehicle.Id = vehicleId;
+
+
             _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
             //Act
             var res = _vehicleService.UnloadCargo(cargo.Id, vehicleId);
 
             //Assert
-            _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
-            _vehicleRespository.Received(1).Update(Arg.Any<int>(), Arg.Any<Vehicle>());
+            _vehicleRespository.Received(1).ReadById(vehicleId);
+            _vehicleRespository.Received(1).Update(vehicleId, vehicle);
             Assert.Equal(cargo.Id, res.Id);
             Assert.Equal(default(Cargo), vehicle.Cargos.FirstOrDefault());
         }
@@ -123,6 +129,7 @@ namespace Logistic.Core.Tests
             vehicle.MaxCargoVolume = volumeAndWeight;
             vehicle.MaxCargoWeightKg = volumeAndWeight;
             vehicle.Cargos = new List<Cargo>();
+            vehicle.Id = vehicleId;
 
             _vehicleRespository.ReadById(vehicleId).Returns(vehicle);
 
@@ -131,7 +138,7 @@ namespace Logistic.Core.Tests
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);
-            _vehicleRespository.Received(1).ReadById(Arg.Any<int>());
+            _vehicleRespository.Received(1).ReadById(vehicleId);
             Assert.Contains("Cargo not found", exception.Message);
         }
 

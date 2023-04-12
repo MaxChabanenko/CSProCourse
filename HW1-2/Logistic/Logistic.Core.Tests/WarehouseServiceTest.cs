@@ -21,6 +21,8 @@ namespace Logistic.Core.Tests
             int warehouseId = 1;
 
             var warehouse = new Warehouse();
+            warehouse.Id = warehouseId;
+
             _warehouseRespository.ReadById(warehouseId).Returns(warehouse);
 
             var cargo = new Cargo(volumeAndWeight, volumeAndWeight);
@@ -29,8 +31,8 @@ namespace Logistic.Core.Tests
             _warehouseService.LoadCargo(cargo, warehouseId);
 
             //Assert
-            _warehouseRespository.Received(1).ReadById(Arg.Any<int>());
-            _warehouseRespository.Received(1).Update(Arg.Any<int>(), Arg.Any<Warehouse>());
+            _warehouseRespository.Received(1).ReadById(warehouseId);
+            _warehouseRespository.Received(1).Update(warehouseId, warehouse);
             Assert.Equal(warehouse.Cargos.FirstOrDefault(), cargo);
         }
 
@@ -48,7 +50,7 @@ namespace Logistic.Core.Tests
 
             //Assert
             NullReferenceException exception = Assert.Throws<NullReferenceException>(act);
-            _warehouseRespository.Received(1).ReadById(Arg.Any<int>());
+            _warehouseRespository.Received(1).ReadById(warehouseId);
         }
 
         [Fact]
@@ -62,6 +64,7 @@ namespace Logistic.Core.Tests
 
             var warehouse = new Warehouse()
             {
+                Id= warehouseId,
                 Cargos = new List<Cargo> { cargo }
             };
             _warehouseRespository.ReadById(warehouseId).Returns(warehouse);
@@ -70,8 +73,8 @@ namespace Logistic.Core.Tests
             var res = _warehouseService.UnloadCargo(cargo.Id, warehouseId);
 
             //Assert
-            _warehouseRespository.Received(1).ReadById(Arg.Any<int>());
-            _warehouseRespository.Received(1).Update(Arg.Any<int>(), Arg.Any<Warehouse>());
+            _warehouseRespository.Received(1).ReadById(warehouseId);
+            _warehouseRespository.Received(1).Update(warehouseId, warehouse);
             Assert.Equal(cargo.Id, res.Id);
             Assert.Equal(default(Cargo), warehouse.Cargos.FirstOrDefault());
         }
@@ -91,7 +94,7 @@ namespace Logistic.Core.Tests
 
             //Assert
             Exception exception = Assert.Throws<Exception>(act);
-            _warehouseRespository.Received(1).ReadById(Arg.Any<int>());
+            _warehouseRespository.Received(1).ReadById(warehouseId);
             Assert.Contains("Cargo not found", exception.Message);
         }
     }

@@ -23,7 +23,7 @@ namespace Logistic.DAL.Tests
             //Act
             var res =  _inMemoryRepository.ReadById(id);
 
-            //Clone(different reference)
+            //Assert
             Assert.NotEqual(vehicle,res);
         }
         [Fact]
