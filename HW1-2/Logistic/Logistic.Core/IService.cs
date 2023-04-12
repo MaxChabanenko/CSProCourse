@@ -1,10 +1,8 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.Services
+namespace Logistic.Core
 {
-    internal interface IService<T,Tid> where T : IEntity<Tid>
+    internal interface IService<T, Tid> where T : IEntity<Tid>
     {
         int Create(T entity);
         T GetById(int id);

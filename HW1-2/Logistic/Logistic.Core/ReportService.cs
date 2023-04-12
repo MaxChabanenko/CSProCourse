@@ -1,11 +1,10 @@
-﻿using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.Services
+namespace Logistic.Core
 {
     public enum ReportType { xml, json }
 
-    internal class ReportService<T, Tid> where T : IEntity<Tid> where Tid : struct, IEquatable<Tid>
+    public class ReportService<T, Tid> where T : IEntity<Tid> where Tid : struct, IEquatable<Tid>
     {
         private readonly IReportingRepository<T, Tid> JsonRepository;
         private readonly IReportingRepository<T, Tid> XmlRepository;

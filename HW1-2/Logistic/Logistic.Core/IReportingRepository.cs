@@ -1,7 +1,6 @@
-﻿using System.Xml.Serialization;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.DataAccess
+namespace Logistic.Core
 {
     public interface IReportingRepository<T, Tid> where T : IEntity<Tid>
     {

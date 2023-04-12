@@ -1,7 +1,5 @@
-﻿using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
-
-namespace Logistic.ConsoleClient.Classes
+﻿
+namespace Logistic.Models
 {
     public class Warehouse : IEntity<int>
     {

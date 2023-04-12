@@ -1,18 +1,22 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.Services
+namespace Logistic.Core
 {
-    internal class VehicleService : IService<Vehicle,int>
+    public class VehicleService : IService<Vehicle, int>
     {
-        private InMemoryRepository<Vehicle> _vehicleRepository;
-        public VehicleService(InMemoryRepository<Vehicle> vehicleRepository)
+        private IRepository<Vehicle> _vehicleRepository;
+        public VehicleService(IRepository<Vehicle> vehicleRepository)
         {
             _vehicleRepository = vehicleRepository;
         }
-        public void LoadCargo( Cargo cargoToLoad, int vehicleId)
+        public void LoadCargo(Cargo cargoToLoad, int vehicleId)
         {
+            if (cargoToLoad.Volume <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargoToLoad.Volume));
+            if (cargoToLoad.Weight <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargoToLoad.Weight));
+
+
             var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
 
             var totalWeight = vehicleToUpdate.Cargos.Sum(x => x.Weight) + cargoToLoad.Weight;
@@ -30,11 +34,16 @@ namespace Logistic.ConsoleClient.Services
             vehicleToUpdate.Cargos.Add(cargoToLoad);
             _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);
         }
+
         public Cargo UnloadCargo(Guid cargoId, int vehicleId)
         {
             var vehicleToUpdate = _vehicleRepository.ReadById(vehicleId);
 
             Cargo cargo = vehicleToUpdate.Cargos.Find(x => x.Id == cargoId);
+            if (cargo is null)
+            {
+                throw new Exception("Cargo not found");
+            }
             vehicleToUpdate.Cargos.Remove(cargo);
 
             _vehicleRepository.Update(vehicleToUpdate.Id, vehicleToUpdate);
@@ -43,7 +52,7 @@ namespace Logistic.ConsoleClient.Services
 
         public int Create(Vehicle vehicle)
         {
-          return _vehicleRepository.Create(vehicle);
+            return _vehicleRepository.Create(vehicle);
         }
 
         public void Delete(int id)
@@ -61,6 +70,6 @@ namespace Logistic.ConsoleClient.Services
             return _vehicleRepository.ReadById(id);
         }
 
-        
+
     }
 }

@@ -1,20 +1,18 @@
-﻿using Logistic.ConsoleClient.Classes;
-using Logistic.ConsoleClient.DataAccess;
-using Logistic.ConsoleClient.Models;
+﻿using Logistic.Models;
 
-namespace Logistic.ConsoleClient.Services
+namespace Logistic.Core
 {
-    internal class WarehouseService : IService<Warehouse,int>
+    public class WarehouseService : IService<Warehouse, int>
     {
-        private InMemoryRepository<Warehouse> _warehouseRepository;
-        public WarehouseService(InMemoryRepository<Warehouse> warehouseRepository)
+        private IRepository<Warehouse> _warehouseRepository;
+        public WarehouseService(IRepository<Warehouse> warehouseRepository)
         {
             _warehouseRepository = warehouseRepository;
         }
 
         public int Create(Warehouse warehouse)
         {
-          return _warehouseRepository.Create(warehouse);
+            return _warehouseRepository.Create(warehouse);
         }
 
         public void Delete(int id)
@@ -34,6 +32,11 @@ namespace Logistic.ConsoleClient.Services
 
         public void LoadCargo(Cargo cargo, int id)
         {
+            if (cargo.Volume <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargo.Volume));
+            if (cargo.Weight <= 0)
+                throw new ArgumentException("Invalid Cargo parameter: ", nameof(cargo.Weight));
+
             var warehouse = GetById(id);
             warehouse.Cargos.Add(cargo);
             _warehouseRepository.Update(warehouse.Id, warehouse);
@@ -44,6 +47,10 @@ namespace Logistic.ConsoleClient.Services
             var warehouse = GetById(id);
 
             Cargo cargo = warehouse.Cargos.Find(x => x.Id == cargoId);
+            if (cargo is null)
+            {
+                throw new Exception("Cargo not found");
+            }
             warehouse.Cargos.Remove(cargo);
 
             _warehouseRepository.Update(warehouse.Id, warehouse);
