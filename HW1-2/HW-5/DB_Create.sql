@@ -1,4 +1,19 @@
---CREATE DATABASE Logistics;
+IF DB_ID('Logistics') IS NULL
+CREATE DATABASE Logistics;
+
+GO
+
+USE Logistics;
+
+CREATE TABLE Cargo (
+ID uniqueidentifier PRIMARY KEY NOT NULL,
+InvoiceID uniqueidentifier,
+WarehouseID  int,
+VehicleID  int,
+Volume float NOT NULL,
+Weight int NOT NULL ,
+Code varchar(255)
+);
 
 CREATE TABLE Invoice (
 ID uniqueidentifier PRIMARY KEY NOT NULL,
@@ -9,7 +24,7 @@ SenderPhoneNumber varchar(255)
 );
 
 CREATE TABLE Vehicle (
-ID uniqueidentifier PRIMARY KEY NOT NULL,
+ID int PRIMARY KEY NOT NULL IDENTITY(1,1),
 VehicleType varchar(10) NOT NULL CHECK (VehicleType IN('Car', 'Ship', 'Plane', 'Train')),
 Number varchar(255),
 MaxCargoWeightKg int NOT NULL,
@@ -18,18 +33,22 @@ MaxCargoVolume float NOT NULL,
 );
 
 CREATE TABLE Warehouse (
-ID uniqueidentifier PRIMARY KEY NOT NULL,
+ID int PRIMARY KEY NOT NULL IDENTITY(1,1),
 );
 
-CREATE TABLE Cargo (
-ID uniqueidentifier PRIMARY KEY NOT NULL,
-InvoiceID uniqueidentifier FOREIGN KEY REFERENCES Logistics.dbo.Invoice(ID),
-VehicleID uniqueidentifier FOREIGN KEY REFERENCES Logistics.dbo.Vehicle(ID) ,
-WarehouseID uniqueidentifier FOREIGN KEY REFERENCES Logistics.dbo.Warehouse(ID) ,
-Volume float NOT NULL,
-Weight int NOT NULL ,
-Code varchar(255)
-);
+GO
+
+ALTER TABLE Cargo
+ADD CONSTRAINT FK_CargoInvoice
+FOREIGN KEY (InvoiceID) REFERENCES Logistics.dbo.Invoice(ID);
+
+ALTER TABLE Cargo
+ADD CONSTRAINT FK_CargoVehicle
+FOREIGN KEY (VehicleID) REFERENCES Logistics.dbo.Vehicle(ID);
+
+ALTER TABLE Cargo
+ADD CONSTRAINT FK_CargoWarehouse
+FOREIGN KEY (WarehouseID) REFERENCES Logistics.dbo.Warehouse(ID);
 
 ALTER TABLE Cargo
 ADD CONSTRAINT CK_AttributeValue
