@@ -1,0 +1,107 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="Logistics" Height="450" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="369*"/>
+            <ColumnDefinition Width="93*"/>
+            <ColumnDefinition Width="338*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.ColumnSpan="3" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Vehicle">
+                <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.552,0.558" Height="408">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="74*"/>
+                        <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="711*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView Margin="26,23,441,19" Grid.ColumnSpan="5" Name ="ListViewVehicle" SelectionChanged="ListViewVehicle_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Number" Width="60" DisplayMemberBinding="{Binding Number}"/>
+                                <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Type}"/>
+                                <GridViewColumn Header="MaxWeight" Width="70" DisplayMemberBinding="{Binding MaxCargoWeightKg}"/>
+                                <GridViewColumn Header="MaxVolume" Width="70" DisplayMemberBinding="{Binding MaxCargoVolume}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <GroupBox Header="Selected vehicle" Margin="275,29,48,19" Padding="10" Grid.Column="2">
+                        <Grid>
+                            <TextBlock Text="Number" Height="22" Margin="10,10,226,285"/>
+                            <TextBox  Name="TextBoxNumber" VerticalAlignment="Top" Width="120" Margin="10,39,226,0" Height="22" />
+                            <TextBox Name="TextBoxWeight" VerticalAlignment="Top" Width="120" Margin="146,39,90,0" Height="22" />
+                            <TextBlock Text="Maximum weight" Height="22" Margin="146,10,90,285"/>
+                            <TextBox Name="TextBoxVolume" VerticalAlignment="Top" Width="120" Margin="146,103,90,0" Height="22" />
+                            <TextBlock Text="Maximum Volume" Height="22" Margin="146,81,90,214"/>
+                            <TextBlock Text="Vehicle type" Height="22" Margin="10,79,226,216"/>
+                            <ComboBox Name="ComboBoxType" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Width="120" />
+                            <Button IsEnabled="False" Name="ButtonDelete" Content="Delete" Margin="43,277,216,10" Click="ButtonDelete_Click" />
+                            <Button IsEnabled="False" Name="ButtonUpdate" Content="Update" Margin="145,277,113,10" Click="ButtonUpdate_Click" />
+                            <Button IsEnabled="False"  Name="LoadCargoButton" Content="Cargo managment..." Margin="10,143,211,143" Click="LoadCargoButton_Click" />
+                            <Button Name="ButtonCreate" Content="Create" Margin="248,277,10,10" Click="ButtonCreate_Click" />
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Name="ReportTab" Header="VehicleONLY_Report" >
+                <Grid Background="#FFE5E5E5">
+                    <GroupBox Header="Import report" Margin="0,0,407,10">
+                        <Grid>
+                            <ListView Margin="10,69,10,16" Name ="ListViewImport">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                        <GridViewColumn Header="Number" Width="60" DisplayMemberBinding="{Binding Number}"/>
+                                        <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Type}"/>
+                                        <GridViewColumn Header="MaxWeight" Width="70" DisplayMemberBinding="{Binding MaxCargoWeightKg}"/>
+                                        <GridViewColumn Header="MaxVolume" Width="70" DisplayMemberBinding="{Binding MaxCargoVolume}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                            <TextBox Name="ImportTextBox" VerticalAlignment="Top" Margin="10,37,82,0" Height="22" IsEnabled="False"/>
+                            <Button Name="ImportButton" Content="Import" VerticalAlignment="Top" Height="22" Margin="298,37,10,0" Click="ImportButton_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Export report" Margin="392,0,10,10">
+                        <Grid>
+
+                            <TextBox Name="ExportTextBox" VerticalAlignment="Top" Margin="10,37,72,0" Height="22" IsEnabled="False"/>
+                            <Label Content="Report type:" HorizontalAlignment="Left" Margin="79,8,0,0" VerticalAlignment="Top"/>
+                            <Button Name="ExportButton" Content="Export"  VerticalAlignment="Top" Height="22" Width="67" Margin="313,37,0,0" Click="ExportButton_Click" />
+                            <ComboBox Name="ReportTypeComboBox" VerticalAlignment="Top" Margin="159,10,101,0" SelectedIndex="0">
+                                <TextBlock>xml</TextBlock>
+                                <TextBlock>json</TextBlock>
+                            </ComboBox>
+                            <ListView Margin="10,69,10,16" Name="ListViewExport">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                        <GridViewColumn Header="Number" Width="60" DisplayMemberBinding="{Binding Number}"/>
+                                        <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Type}"/>
+                                        <GridViewColumn Header="MaxWeight" Width="70" DisplayMemberBinding="{Binding MaxCargoWeightKg}"/>
+                                        <GridViewColumn Header="MaxVolume" Width="70" DisplayMemberBinding="{Binding MaxCargoVolume}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+
+
+
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
