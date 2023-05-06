@@ -14,15 +14,11 @@ namespace Logistic.DAL
             return fileName;
         }
 
-        public List<T> Read(string filename)
+        public List<T> Read(string path)
         {
-            Assembly asm = Assembly.GetExecutingAssembly();
-            string path = Path.GetDirectoryName(asm.Location);
-
-            var file = File.ReadAllText(Path.Combine(path , filename));
+            var file = File.ReadAllText(path);
 
             return JsonSerializer.Deserialize<List<T>>(file);
-
         }
     }
 }

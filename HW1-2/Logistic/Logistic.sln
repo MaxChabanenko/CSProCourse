@@ -5,19 +5,21 @@ VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.ClientApp", "Logistic\Logistic.ClientApp.csproj", "{E5E30907-A771-401A-948D-221612F1A696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistic.Core", "Logistic.Core\Logistic.Core.csproj", "{E8418EEA-4CA8-4618-A23B-D1541BFFCF13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.Core", "Logistic.Core\Logistic.Core.csproj", "{E8418EEA-4CA8-4618-A23B-D1541BFFCF13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistic.DAL", "Logistic.DAL\Logistic.DAL.csproj", "{C5AF7C41-0674-4526-88D5-7BB02E34F0D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.DAL", "Logistic.DAL\Logistic.DAL.csproj", "{C5AF7C41-0674-4526-88D5-7BB02E34F0D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistic.Models", "Logistic.Models\Logistic.Models.csproj", "{ED9FEC5B-C75F-40AE-AE37-FF535C2BCDCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.Models", "Logistic.Models\Logistic.Models.csproj", "{ED9FEC5B-C75F-40AE-AE37-FF535C2BCDCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistic.Core.Tests", "Logistic.Core.Tests\Logistic.Core.Tests.csproj", "{F842B287-2449-4BE2-A41D-1B444DF2450C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.Core.Tests", "Logistic.Core.Tests\Logistic.Core.Tests.csproj", "{F842B287-2449-4BE2-A41D-1B444DF2450C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistic.DAL.Tests", "Logistic.DAL.Tests\Logistic.DAL.Tests.csproj", "{ADB580CD-CF20-4E5D-8CE2-79E0E2F86F45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.DAL.Tests", "Logistic.DAL.Tests\Logistic.DAL.Tests.csproj", "{ADB580CD-CF20-4E5D-8CE2-79E0E2F86F45}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D409E43-D1A0-4D0A-891D-B73000DF0899}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7D249E7D-3F76-482F-94FF-1C603F9AF04A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.WPF", "Logistic.WPF\Logistic.WPF\Logistic.WPF.csproj", "{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{ADB580CD-CF20-4E5D-8CE2-79E0E2F86F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADB580CD-CF20-4E5D-8CE2-79E0E2F86F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADB580CD-CF20-4E5D-8CE2-79E0E2F86F45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{ED9FEC5B-C75F-40AE-AE37-FF535C2BCDCE} = {8D409E43-D1A0-4D0A-891D-B73000DF0899}
 		{F842B287-2449-4BE2-A41D-1B444DF2450C} = {7D249E7D-3F76-482F-94FF-1C603F9AF04A}
 		{ADB580CD-CF20-4E5D-8CE2-79E0E2F86F45} = {7D249E7D-3F76-482F-94FF-1C603F9AF04A}
+		{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6} = {8D409E43-D1A0-4D0A-891D-B73000DF0899}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0448E5E8-24F1-46D1-9836-11A8A09446E4}
