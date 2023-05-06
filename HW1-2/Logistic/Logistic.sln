@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D409E43-D1A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7D249E7D-3F76-482F-94FF-1C603F9AF04A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.WPF", "WpfApp1\WpfApp1\Logistic.WPF.csproj", "{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistic.WPF", "Logistic.WPF\Logistic.WPF\Logistic.WPF.csproj", "{A3DEBD69-81A3-4BB6-B995-16F6BE6FD7C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

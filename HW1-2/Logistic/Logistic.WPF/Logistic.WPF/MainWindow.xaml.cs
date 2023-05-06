@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WpfApp1
 {
@@ -28,7 +29,7 @@ namespace WpfApp1
 	public partial class MainWindow : Window
 	{
 		InMemoryRepository<Vehicle> vehicleRepository;
-		VehicleService vehicleService ;
+		VehicleService vehicleService;
 		ReportService<Vehicle, int> reportService;
 
 		public MainWindow()
@@ -36,32 +37,34 @@ namespace WpfApp1
 
 			InitializeComponent();
 
-			foreach(var type in Enum.GetValues(typeof(VehicleType)))
-				ComboBoxType.Items.Add(type.ToString());
+			foreach (var type in Enum.GetValues(typeof(VehicleType)))
+			{ 
+				ComboBoxType.Items.Add(type.ToString()); 
+			}
 
 			vehicleRepository = new InMemoryRepository<Vehicle>();
 			vehicleService = new VehicleService(vehicleRepository);
 			reportService = new ReportService<Vehicle, int>(new JsonRepository<Vehicle, int>(), new XmlRepository<Vehicle, int>());
 
-			ListViewVehicle.ItemsSource= vehicleService.GetAll();
+			ListViewVehicle.ItemsSource = vehicleService.GetAll();
 
-			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
+			this.Dispatcher.UnhandledException += new DispatcherUnhandledExceptionEventHandler(OnDispatcherUnhandledException);
 		}
-
-		static void MyHandler(object sender, UnhandledExceptionEventArgs args)
+		private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
 		{
-			Exception e = (Exception)args.ExceptionObject;
-
-			if (args.ExceptionObject is ArgumentOutOfRangeException)
+			if (e.Exception is ArgumentOutOfRangeException)
+			{
 				MessageBox.Show("Choose item from ListView first", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-			else if(args.ExceptionObject is ArgumentException)
+			}
+			else if (e.Exception is ArgumentException)
+			{
 				MessageBox.Show("Cargo loading error (check overflow or ids)", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
 			else
-				MessageBox.Show("Unhandled exception", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-			//я ще не знаю, як обробити, щоб програма не вилітала при ексепшнах
-			//просто не давати користувачу можливості (вимикати кнопки) створити ексепшни
+			{
+				MessageBox.Show(string.Format("An unhandled exception occurred: {0}", e.Exception.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+			e.Handled = true;
 		}
 
 		private void LoadCargoButton_Click(object sender, RoutedEventArgs e)
@@ -81,7 +84,7 @@ namespace WpfApp1
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			OpenFileDialog openFileDialog = new OpenFileDialog();
-			if (openFileDialog.ShowDialog() == true) 
+			if (openFileDialog.ShowDialog() == true)
 			{
 				ImportTextBox.Text = openFileDialog.FileName;
 			}
@@ -95,7 +98,6 @@ namespace WpfApp1
 				ButtonDelete.IsEnabled = true;
 				ButtonUpdate.IsEnabled = true;
 
-				//після видалення Vehicle автоматично змінюється обраний елементи, а після видалення останнього буде NullReference
 				Vehicle selectedVehicle = (Vehicle)ListViewVehicle.SelectedItems[0];
 				TextBoxNumber.Text = selectedVehicle.Number;
 				TextBoxWeight.Text = selectedVehicle.MaxCargoWeightKg.ToString();
@@ -111,13 +113,13 @@ namespace WpfApp1
 			}
 		}
 		private Vehicle InputVehicle()
-        {
+		{
 			double maxCargoVolume = Convert.ToDouble(TextBoxVolume.Text);
 			int maxCargoWeightKg = Convert.ToInt32(TextBoxWeight.Text);
 			string number = TextBoxNumber.Text;
 
 			var isParsed = Enum.TryParse((string)ComboBoxType.SelectedItem, out VehicleType vehicleType) && Enum.IsDefined(typeof(VehicleType), vehicleType);
-			
+
 			Vehicle result = new Vehicle(vehicleType, maxCargoWeightKg, maxCargoVolume);
 			result.Number = number;
 
@@ -127,14 +129,14 @@ namespace WpfApp1
 		{
 			var newVehicle = InputVehicle();
 
-			var serviceGivenId=vehicleService.Create(newVehicle);
+			var serviceGivenId = vehicleService.Create(newVehicle);
 			newVehicle.Id = serviceGivenId;
 
 			ListViewVehicle.ItemsSource = vehicleService.GetAll();
 		}
 
 		private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
-        {
+		{
 			var selectedVehicle = (Vehicle)ListViewVehicle.SelectedItems[0];
 			var newVehicle = InputVehicle();
 
@@ -148,7 +150,7 @@ namespace WpfApp1
 		}
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
-        {
+		{
 			var selectedVehicle = (Vehicle)ListViewVehicle.SelectedItems[0];
 
 			vehicleService.Delete(selectedVehicle.Id);
@@ -156,8 +158,8 @@ namespace WpfApp1
 
 		}
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e)
-        {
+		private void ImportButton_Click(object sender, RoutedEventArgs e)
+		{
 			var dialog = new OpenFileDialog();
 
 			Assembly asm = Assembly.GetExecutingAssembly();
@@ -165,7 +167,7 @@ namespace WpfApp1
 
 			dialog.InitialDirectory = path;
 
-			dialog.Filter = "(*.xml, *.json)|*.xml;*.json|All files (*.*)|*.*"; 
+			dialog.Filter = "(*.xml, *.json)|*.xml;*.json|All files (*.*)|*.*";
 
 			bool? result = dialog.ShowDialog();
 
@@ -184,27 +186,31 @@ namespace WpfApp1
 			}
 		}
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-			if(ReportTab.IsSelected)
+		private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (ReportTab.IsSelected)
+			{
 				ListViewExport.ItemsSource = vehicleService.GetAll();
+			}
 
 		}
 
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
-        {
+		private void ExportButton_Click(object sender, RoutedEventArgs e)
+		{
 			try
 			{
 				Enum.TryParse(ReportTypeComboBox.Text, out ReportType reportType);
 				var entities = vehicleService.GetAll();
 
-				if(entities.Count>0)
+				if (entities.Count > 0)
+				{
 					reportService.CreateReport(entities, reportType);
+				}
 			}
 			catch (Exception)
 			{
 				MessageBox.Show("File export error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 		}
-    }
+	}
 }

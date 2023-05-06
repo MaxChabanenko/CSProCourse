@@ -95,8 +95,9 @@ namespace WpfApp1
 
 			}
 			else
+			{
 				ButtonUnloadCargo.IsEnabled = false;
-
+			}
 		}
 	}
 }
