@@ -9,17 +9,18 @@ namespace Logistic.DAL
     {
         public string Create(List<T> entities)
         {
-            string fileName = typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".json";
-            File.WriteAllText(fileName, JsonSerializer.Serialize(entities));
-            return fileName;
-        }
-
-        public List<T> Read(string filename)
-        {
             Assembly asm = Assembly.GetExecutingAssembly();
             string path = Path.GetDirectoryName(asm.Location);
 
-            var file = File.ReadAllText(Path.Combine(path , filename));
+            string fileName = typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".json";
+            File.WriteAllText(Path.Combine(path, fileName), JsonSerializer.Serialize(entities));
+
+            return Path.Combine(path, fileName);
+        }
+
+        public List<T> Read(string filePath)
+        {
+            var file = File.ReadAllText(filePath);
 
             return JsonSerializer.Deserialize<List<T>>(file);
 

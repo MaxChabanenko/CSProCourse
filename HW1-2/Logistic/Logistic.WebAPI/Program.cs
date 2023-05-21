@@ -1,17 +1,21 @@
 using Logistic.Core;
 using Logistic.DAL;
 using Logistic.Models;
+using static Logistic.WebAPI.Controllers.ReportController;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<VehicleService>();
+builder.Services.AddScoped<WarehouseService>();
 
-//builder.Services.AddSingleton<IService<Vehicle, int>, VehicleService>();
-builder.Services.AddSingleton<VehicleService>();
-builder.Services.AddSingleton<WarehouseService>();
-
+//сінглтон адже нам треба працювати з одним _VehicleRepository, апдейт наприклад ніколи не знайде потрібний елемент
 builder.Services.AddSingleton<IRepository<Vehicle>, InMemoryRepository<Vehicle>>();
 builder.Services.AddSingleton<IRepository<Warehouse>, InMemoryRepository<Warehouse>>();
+
+builder.Services.AddSingleton<IReportingRepository<Vehicle, int>, JsonRepository<Vehicle, int>>();
+builder.Services.AddSingleton<IReportingRepository<Vehicle, int>, XmlRepository<Vehicle, int>>();
+//через багато імплементацій саме остання (XML) буде використовуватися і я настільки не розумію DI, що навіть гугл не допоміг
 
 builder.Services.AddControllers();
 
