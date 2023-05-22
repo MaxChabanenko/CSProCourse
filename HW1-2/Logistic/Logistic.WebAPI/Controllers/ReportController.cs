@@ -19,16 +19,23 @@ namespace Logistic.WebAPI.Controllers
             this.vehicleService = vehicleService;
         }
         [HttpPost("CreateReport")]
-        public string Create(string type)
+        public IActionResult Create(string type)
         {
-            Enum.TryParse(type, out ReportType reportType);
-            var entities = vehicleService.GetAll();
-
-            if (entities.Count > 0)
+            try
             {
-                return reportService.CreateReport(entities, reportType);
+                Enum.TryParse(type, out ReportType reportType);
+                var entities = vehicleService.GetAll();
+
+                if (entities.Count > 0)
+                {
+                    return Ok(reportService.CreateReport(entities, reportType));
+                }
+                return BadRequest("No vehicles");
             }
-            return "Error";
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpGet("ReadReport")]
         public IActionResult Read(string filename)
