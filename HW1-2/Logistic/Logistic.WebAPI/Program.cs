@@ -13,9 +13,17 @@ builder.Services.AddScoped<WarehouseService>();
 builder.Services.AddSingleton<IRepository<Vehicle>, InMemoryRepository<Vehicle>>();
 builder.Services.AddSingleton<IRepository<Warehouse>, InMemoryRepository<Warehouse>>();
 
-builder.Services.AddSingleton<IReportingRepository<Vehicle, int>, JsonRepository<Vehicle, int>>();
-builder.Services.AddSingleton<IReportingRepository<Vehicle, int>, XmlRepository<Vehicle, int>>();
-//через багато імплементацій саме остання (XML) буде використовуватися і я настільки не розумію DI, що навіть гугл не допоміг
+builder.Services.AddSingleton<ReportService<Vehicle, int>>();
+
+builder.Services.AddSingleton<JsonRepository<Vehicle, int>>();
+builder.Services.AddSingleton<XmlRepository<Vehicle, int>>();
+
+builder.Services.AddSingleton<IDictionary<ReportType, IReportingRepository<Vehicle, int>>>(sp =>
+    new Dictionary<ReportType, IReportingRepository<Vehicle, int>>
+    {
+        { ReportType.xml, sp.GetRequiredService<XmlRepository<Vehicle, int>>() },
+        { ReportType.json, sp.GetRequiredService<JsonRepository<Vehicle, int>>() },
+    });
 
 builder.Services.AddControllers();
 

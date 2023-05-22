@@ -12,15 +12,14 @@ namespace Logistic.WebAPI.Controllers
     {
         private readonly ReportService<Vehicle, int> reportService;
         private readonly VehicleService vehicleService;
-        public delegate IReportingRepository<Vehicle, int> ReportResolver(ReportType serviceType);
 
-        public ReportController(ReportService<Vehicle, int> rs, VehicleService vs)
+        public ReportController(ReportService<Vehicle, int> reportService, VehicleService vehicleService)
         {
-            reportService = rs;
-            vehicleService = vs;
+            this.reportService = reportService;
+            this.vehicleService = vehicleService;
         }
         [HttpPost("CreateReport")]
-        public string Create(string type/*ReportType reportType*/)
+        public string Create(string type)
         {
             Enum.TryParse(type, out ReportType reportType);
             var entities = vehicleService.GetAll();
@@ -32,20 +31,16 @@ namespace Logistic.WebAPI.Controllers
             return "Error";
         }
         [HttpGet("ReadReport")]
-        public string Read(string filename)
+        public IActionResult Read(string filename)
         {
             try
             {
                 List<Vehicle> list = reportService.LoadReport(filename);
-                string res="";
-                foreach (var item in list)
-                  res+=item.ToString();
-
-                return res;
+                return Ok(list);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "Error";
+                return BadRequest(ex.Message);
             }
         }
        

@@ -16,22 +16,22 @@ namespace Logistic.WebAPI.Controllers
             vehicleService = vs;
         }
         [HttpPost("Create")]
-        public int Read(Vehicle v)
+        public int CreateVehicle(Vehicle v)
         {
             return vehicleService.Create(v);
         }
         [HttpGet("ReadAll")]
-        public IEnumerable<Vehicle> GetAll()
+        public IEnumerable<Vehicle> GetAllVehicles()
         {
             return vehicleService.GetAll();
         }
         [HttpPut("Update")]
-        public int Read(Vehicle newVehicle, int id)
+        public int UpdateVehicle(Vehicle newVehicle, int id)
         {
             return vehicleService.Update(newVehicle, id);
         }
         [HttpDelete("Delete")]
-        public IActionResult Read(int id)
+        public IActionResult DeleteVehicle(int id)
         {
             vehicleService.Delete(id);
             return Ok();
@@ -40,7 +40,7 @@ namespace Logistic.WebAPI.Controllers
         public IActionResult LoadCargo(Cargo cargo, int vehicleId)
         {
             vehicleService.LoadCargo(cargo, vehicleId);
-            return Ok();
+            return Accepted();
         }
         [HttpPut("UnloadCargo")]
         public IActionResult UnloadCargo(Guid cargoId, int vehicleId)

@@ -9,12 +9,16 @@ namespace Logistic.Core
         private readonly IReportingRepository<T, Tid> JsonRepository;
         private readonly IReportingRepository<T, Tid> XmlRepository;
 
+        public ReportService(IDictionary<ReportType, IReportingRepository<T, Tid>> repositories)
+        {
+            XmlRepository = repositories[ReportType.xml];
+            JsonRepository = repositories[ReportType.json];
+        }
         public ReportService(IReportingRepository<T, Tid> jsonReportingService, IReportingRepository<T, Tid> xmlRepotingRepository)
         {
             XmlRepository = xmlRepotingRepository;
             JsonRepository = jsonReportingService;
         }
-
         public string CreateReport(List<T> entities, ReportType type)
         {
             if (type == ReportType.json)

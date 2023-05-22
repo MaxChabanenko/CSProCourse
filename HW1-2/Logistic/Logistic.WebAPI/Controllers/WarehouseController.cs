@@ -16,22 +16,22 @@ namespace Logistic.WebAPI.Controllers
             warehouseService = vs;
         }
         [HttpPost("Create")]
-        public int Read(Warehouse v)
+        public int CreateWarehouse(Warehouse v)
         {
             return warehouseService.Create(v);
         }
         [HttpGet("ReadAll")]
-        public IEnumerable<Warehouse> GetAll()
+        public IEnumerable<Warehouse> GetAllWarehouses()
         {
             return warehouseService.GetAll();
         }
         [HttpPut("Update")]
-        public int Read(Warehouse newWarehouse, int id)
+        public int UpdateWarehouse(Warehouse newWarehouse, int id)
         {
             return warehouseService.Update(newWarehouse, id);
         }
         [HttpDelete("Delete")]
-        public IActionResult Read(int id)
+        public IActionResult DeleteWarehouse(int id)
         {
             warehouseService.Delete(id);
             return Ok();
