@@ -8,9 +8,13 @@ namespace Logistic.DAL
 where TEntity : IEntity<int>
 
     {
-        private List<TEntity> _list = new List<TEntity>();
-        private int IdCount = 1;
-
+        private List<TEntity> _list ;
+        private int IdCount;
+        public InMemoryRepository()
+        {
+            _list = new List<TEntity>();
+            IdCount = 1;
+        }
         public TEntity ReadById(int id)
         {
             var entity = _list.FirstOrDefault(x => x.Id.Equals(id));

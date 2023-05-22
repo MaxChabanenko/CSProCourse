@@ -9,15 +9,19 @@ namespace Logistic.DAL
     {
         public string Create(List<T> entities)
         {
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string path = Path.GetDirectoryName(asm.Location);
+
             string fileName = typeof(T).Name + "_" + DateTime.Now.ToString("dd_MM_yyyy_HH_mm") + ".json";
-            File.WriteAllText(fileName, JsonSerializer.Serialize(entities));
-            return fileName;
+            File.WriteAllText(Path.Combine(path, fileName), JsonSerializer.Serialize(entities));
+
+            return Path.Combine(path, fileName);
         }
 
-        public List<T> Read(string path)
-        {
-            var file = File.ReadAllText(path);
 
+        public List<T> Read(string filePath)
+        {
+            var file = File.ReadAllText(filePath);
             return JsonSerializer.Deserialize<List<T>>(file);
         }
     }

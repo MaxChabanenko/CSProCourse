@@ -19,7 +19,11 @@ namespace Logistic.Core
         {
             _warehouseRepository.Delete(id);
         }
-
+        public int Update(Warehouse warehouse, int id)
+        {
+            _warehouseRepository.Delete(id);
+            return _warehouseRepository.Create(warehouse);
+        }
         public List<Warehouse> GetAll()
         {
             return _warehouseRepository.ReadAll();

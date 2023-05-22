@@ -2,7 +2,7 @@
 
 namespace Logistic.Core
 {
-    internal interface IService<T, Tid> where T : IEntity<Tid>
+    public interface IService<T, Tid> where T : IEntity<Tid>
     {
         int Create(T entity);
         T GetById(int id);

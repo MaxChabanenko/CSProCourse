@@ -59,7 +59,11 @@ namespace Logistic.Core
         {
             _vehicleRepository.Delete(id);
         }
-
+        public int Update(Vehicle newVehicle, int deleteId)
+        {
+            _vehicleRepository.Delete(deleteId);
+            return _vehicleRepository.Create(newVehicle);
+        }
         public List<Vehicle> GetAll()
         {
             return _vehicleRepository.ReadAll();
