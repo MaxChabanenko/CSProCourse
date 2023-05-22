@@ -22,13 +22,13 @@ namespace Logistic.Core
             var totalWeight = vehicleToUpdate.Cargos.Sum(x => x.Weight) + cargoToLoad.Weight;
             if (totalWeight > vehicleToUpdate.MaxCargoWeightKg)
             {
-                throw new Exception("Not enough weight capacity to fit in the " + cargoToLoad.ToString());
+                throw new ArgumentException("Not enough weight capacity to fit in the " + cargoToLoad.ToString());
             }
 
             var totalVolume = vehicleToUpdate.Cargos.Sum(x => x.Volume) + cargoToLoad.Volume;
             if (totalVolume > vehicleToUpdate.MaxCargoVolume)
             {
-                throw new Exception("Not enough space to fit in the " + cargoToLoad.ToString());
+                throw new ArgumentException("Not enough space to fit in the " + cargoToLoad.ToString());
             }
 
             vehicleToUpdate.Cargos.Add(cargoToLoad);
@@ -42,7 +42,7 @@ namespace Logistic.Core
             Cargo cargo = vehicleToUpdate.Cargos.Find(x => x.Id == cargoId);
             if (cargo is null)
             {
-                throw new Exception("Cargo not found");
+                throw new ArgumentException("Cargo not found");
             }
             vehicleToUpdate.Cargos.Remove(cargo);
 

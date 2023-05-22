@@ -21,6 +21,7 @@ namespace Logistic.DAL
             return Path.Combine(path, fileName);
         }
 
+
         public List<T> Read(string filePath)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));

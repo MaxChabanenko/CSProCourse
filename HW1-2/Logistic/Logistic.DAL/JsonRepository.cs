@@ -18,12 +18,11 @@ namespace Logistic.DAL
             return Path.Combine(path, fileName);
         }
 
+
         public List<T> Read(string filePath)
         {
             var file = File.ReadAllText(filePath);
-
             return JsonSerializer.Deserialize<List<T>>(file);
-
         }
     }
 }
